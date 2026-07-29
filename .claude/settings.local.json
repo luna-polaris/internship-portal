@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(composer require *)",
+      "Bash(php artisan *)",
+      "Bash(tasklist)",
+      "Read(//d/xampp/**)",
+      "Read(//c//**)",
+      "Bash(cmd //c \"start /B D:\\\\\\\\xampp\\\\\\\\mysql_start.bat\")",
+      "Bash(\"/d/xampp/mysql/bin/mysql.exe\" -u root -e \"SHOW DATABASES; USE internship_portal; SHOW TABLES;\")"
+    ]
+  }
+}

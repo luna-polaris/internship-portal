@@ -1,0 +1,482 @@
+/* ============================================
+   HOME PAGE EXTENSION
+   Sections appended below the hero, adapted from the appendMainPage/
+   layout (Tooplate "Level" template) and recoloured to InternHub's
+   dark / neon-chartreuse design language (see :root in stylePublic.css).
+   ============================================ */
+
+/* --- NAV: LOGGED-IN USER WIDGET --- */
+#nav-user-widget {
+    display: none;
+    position: relative;
+    align-items: center;
+    pointer-events: auto;
+}
+
+#nav-user-widget.is-visible {
+    display: flex;
+}
+
+#nav-auth-links.is-hidden {
+    display: none;
+}
+
+.nav-user__trigger {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    border: 1px solid transparent;
+    padding: 6px 10px;
+    cursor: pointer;
+    transition: border-color 0.3s var(--ease-heavy);
+}
+
+.nav-user__trigger:hover,
+.nav-user:hover .nav-user__trigger {
+    border-color: rgba(223, 255, 0, 0.3);
+}
+
+.nav-user__avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: var(--steel);
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--off-white);
+    flex-shrink: 0;
+}
+
+.nav-user__name {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--off-white);
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.nav-user__dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 4px;
+    min-width: 160px;
+    background: var(--graphite);
+    border: 1px solid var(--seam);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px);
+    transition: opacity 0.25s var(--ease-heavy), transform 0.25s var(--ease-heavy), visibility 0s linear 0.25s;
+}
+
+.nav-user:hover .nav-user__dropdown,
+.nav-user:focus-within .nav-user__dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition: opacity 0.25s var(--ease-heavy), transform 0.25s var(--ease-heavy), visibility 0s linear 0s;
+}
+
+.nav-user__dropdown a,
+.nav-user__dropdown button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 14px 18px;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(240, 240, 240, 0.7);
+    text-decoration: none;
+    cursor: pointer;
+    border-bottom: 1px solid var(--seam);
+}
+
+.nav-user__dropdown a:last-child,
+.nav-user__dropdown button:last-child {
+    border-bottom: none;
+}
+
+.nav-user__dropdown a:hover,
+.nav-user__dropdown button:hover {
+    color: var(--neon-chartreuse);
+    background: rgba(223, 255, 0, 0.05);
+}
+
+.ext-section {
+    padding: 100px 36px;
+    background: var(--carbon);
+}
+
+.ext-section--alt {
+    background: var(--graphite);
+}
+
+.ext-container {
+    max-width: 1140px;
+    margin: 0 auto;
+}
+
+.ext-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--neon-chartreuse);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ext-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 32px;
+    height: 1px;
+    background: var(--neon-chartreuse);
+}
+
+.ext-heading {
+    font-family: var(--font-spine);
+    font-size: clamp(2rem, 4.5vw, 3.2rem);
+    text-transform: uppercase;
+    color: var(--off-white);
+    line-height: 1;
+    margin-bottom: 20px;
+}
+
+.ext-subtext {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    line-height: 1.8;
+    color: rgba(240, 240, 240, 0.6);
+    max-width: 560px;
+}
+
+/* --- CTA BANNER (from tm-section-2) --- */
+.ext-cta {
+    padding: 90px 36px;
+    background: var(--graphite);
+    text-align: center;
+    border-top: 1px solid var(--seam);
+    border-bottom: 1px solid var(--seam);
+}
+
+.ext-cta .ext-heading {
+    margin-bottom: 14px;
+}
+
+.ext-cta .ext-subtext {
+    margin: 0 auto 36px;
+}
+
+.ext-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 40px;
+    background: var(--neon-chartreuse);
+    color: var(--carbon);
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.3s var(--ease-heavy), transform 0.3s var(--ease-heavy);
+}
+
+.ext-btn:hover {
+    background: var(--off-white);
+    transform: translateY(-2px);
+}
+
+.ext-btn-ghost {
+    display: inline-block;
+    margin-top: 18px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--ash);
+    text-decoration: none;
+}
+
+.ext-btn-ghost a {
+    color: var(--off-white);
+    border-bottom: 1px solid var(--steel);
+}
+
+.ext-btn-ghost a:hover {
+    border-color: var(--neon-chartreuse);
+    color: var(--neon-chartreuse);
+}
+
+/* --- FEATURES (from the 3-article tm-section) --- */
+.ext-features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 48px;
+    margin-top: 56px;
+    text-align: center;
+}
+
+.ext-feature-icon {
+    font-size: 2.4rem;
+    color: var(--neon-chartreuse);
+    margin-bottom: 20px;
+}
+
+.ext-feature-title {
+    font-family: var(--font-spine);
+    font-size: 1.15rem;
+    text-transform: uppercase;
+    color: var(--off-white);
+    margin-bottom: 12px;
+    letter-spacing: 0.02em;
+}
+
+.ext-feature-text {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    line-height: 1.8;
+    color: rgba(240, 240, 240, 0.55);
+}
+
+/* --- FEATURED COMPANIES (from tm-section-4 carousel + sidebar) --- */
+.ext-explore-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+    margin-top: 48px;
+    align-items: start;
+}
+
+.ext-carousel {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 12px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--steel) transparent;
+}
+
+.ext-carousel::-webkit-scrollbar {
+    height: 6px;
+}
+
+.ext-carousel::-webkit-scrollbar-thumb {
+    background: var(--steel);
+}
+
+.ext-company-card {
+    flex: 0 0 240px;
+    background: var(--carbon);
+    border: 1px solid var(--seam);
+    padding: 24px;
+}
+
+.ext-company-card__industry {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--neon-chartreuse);
+    margin-bottom: 10px;
+}
+
+.ext-company-card__name {
+    font-family: var(--font-spine);
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    color: var(--off-white);
+    margin-bottom: 8px;
+    line-height: 1.1;
+}
+
+.ext-company-card__meta {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--ash);
+}
+
+.ext-explore-empty {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--ash);
+    padding: 24px;
+    border: 1px dashed var(--steel);
+}
+
+.ext-sidebar {
+    background: var(--carbon);
+    border: 1px solid var(--seam);
+}
+
+.ext-sidebar__head {
+    background: var(--neon-chartreuse);
+    color: var(--carbon);
+    padding: 20px 24px;
+}
+
+.ext-sidebar__head h3 {
+    font-family: var(--font-spine);
+    font-size: 1.1rem;
+    text-transform: uppercase;
+}
+
+.ext-sidebar__list {
+    list-style: none;
+}
+
+.ext-sidebar__list li a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(240, 240, 240, 0.7);
+    text-decoration: none;
+    border-bottom: 1px solid var(--seam);
+    transition: color 0.3s var(--ease-heavy), padding-left 0.3s var(--ease-heavy);
+}
+
+.ext-sidebar__list li:last-child a {
+    border-bottom: none;
+}
+
+.ext-sidebar__list li a:hover {
+    color: var(--neon-chartreuse);
+    padding-left: 30px;
+}
+
+/* --- GET IN TOUCH (from tm-section-6 map + form) --- */
+.ext-contact-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-top: 48px;
+}
+
+#ext-map {
+    width: 100%;
+    height: 100%;
+    min-height: 320px;
+    border: 1px solid var(--seam);
+    background: var(--carbon);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ash);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    text-align: center;
+    padding: 2rem;
+}
+
+.ext-contact-card {
+    background: var(--carbon);
+    border: 1px solid var(--seam);
+    padding: 40px;
+}
+
+.ext-contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px 32px;
+    margin-top: 28px;
+}
+
+.ext-contact-item-label {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--steel);
+    margin-bottom: 8px;
+}
+
+.ext-contact-item-value {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--off-white);
+}
+
+.ext-contact-item-value a {
+    color: var(--off-white);
+    text-decoration: none;
+    border-bottom: 1px solid var(--steel);
+}
+
+.ext-contact-item-value a:hover {
+    border-color: var(--neon-chartreuse);
+    color: var(--neon-chartreuse);
+}
+
+/* --- FOOTER (from the tooplate copyright bar) --- */
+.ext-footer {
+    background: var(--seam);
+    padding: 40px 36px;
+    text-align: center;
+}
+
+.ext-footer p {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: rgba(240, 240, 240, 0.4);
+}
+
+.ext-footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 16px;
+}
+
+.ext-footer-links a {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(240, 240, 240, 0.6);
+    text-decoration: none;
+}
+
+.ext-footer-links a:hover {
+    color: var(--neon-chartreuse);
+}
+
+@media (max-width: 900px) {
+    .ext-section,
+    .ext-cta {
+        padding: 60px 20px;
+    }
+
+    .ext-features-grid,
+    .ext-explore-layout,
+    .ext-contact-layout,
+    .ext-contact-grid {
+        grid-template-columns: 1fr;
+    }
+
+    #ext-map {
+        min-height: 220px;
+    }
+}
