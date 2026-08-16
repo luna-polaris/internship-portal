@@ -4,11 +4,15 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateStudentProfileRequest;
+use App\Models\Recommendation;
 use App\Models\Student;
+use App\Services\RecommendationService;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
+    public function __construct(private RecommendationService $recommendations) {}
+
     public function show(Request $request)
     {
         $profile = Student::with('user')->where('user_id', $request->user()->user_id)->first();
@@ -56,5 +60,35 @@ class StudentController extends Controller
         $students = Student::with('user')->get();
 
         return response()->json(['success' => true, 'data' => $students]);
+    }
+
+    /**
+     * Module 3 — reads the recommendation engine's stored output for the
+     * authenticated student (never another student's — student_id always
+     * comes from the token, never from client input). Computed lazily on
+     * first access; every later refresh comes from StudentObserver /
+     * InternshipObserver instead of running here.
+     */
+    public function recommended(Request $request)
+    {
+        $student = Student::where('user_id', $request->user()->user_id)->first();
+
+        if (! $student) {
+            return response()->json(['success' => false, 'message' => 'Student profile not found.'], 404);
+        }
+
+        if (! Recommendation::where('student_id', $student->student_id)->exists()) {
+            $this->recommendations->refreshForStudent($student);
+        }
+
+        $recommended = Recommendation::where('student_id', $student->student_id)
+            ->with('internship.company:company_id,company_name,city,state,logo')
+            ->orderByDesc('score')
+            ->limit(10)
+            ->get()
+            ->pluck('internship')
+            ->filter();
+
+        return response()->json(['success' => true, 'data' => $recommended->values()]);
     }
 }

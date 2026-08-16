@@ -11,7 +11,7 @@
     ServerName internhub.local
     DocumentRoot "full/path to assignment folder/laravel/public" 
 
-    <Directory "<full/path to assigment folder/laravel/public>"
+    <Directory "full/path to assigment folder/laravel/public" >
         Options Indexes FollowSymLinks
         AllowOverride All
         Require all granted
@@ -32,13 +32,17 @@ Then import
 
 8. At VScode, views > terminal > new terminal, type
 cd laravel
+composer install
+php artisan key:generate
 php artisan migrate
-php artisan db:seed --class=AdminSeeder
+php artisan db:seed
 php artisan storage:link
+
 
 9. Go to 127.0.0.1:666
 
 
 # Notes
-1. Username : admin, Password: ChangeMe123! (refer .env)
+1. Username : admin, Password:  ChangeMe123!   (refer .env)
+2. Password for demo account (employer): password123
 

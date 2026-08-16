@@ -30,6 +30,11 @@ class Company extends Model
         return $this->belongsTo(Employer::class, 'employer_id', 'employer_id');
     }
 
+    public function internships()
+    {
+        return $this->hasMany(Internship::class, 'company_id', 'company_id');
+    }
+
     public function scopeSearch($query, string $keyword)
     {
         return $query->where(function ($q) use ($keyword) {

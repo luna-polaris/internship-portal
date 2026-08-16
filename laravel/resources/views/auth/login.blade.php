@@ -132,5 +132,7 @@
             }, '{{ url('/') }}');
         });
     </script>
+
+    <script src="{{ asset('scripts/passwordToggle.js') }}"></script>
 </body>
 </html>

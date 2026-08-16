@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\Company;
 use App\Models\Employer;
+use App\Models\Internship;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -14,6 +15,12 @@ class AdminController extends Controller
 {
     public function dashboardStats()
     {
+        // One grouped query for the posting counts rather than four COUNT(*)
+        // round-trips, since the dashboard shows all of them together.
+        $byStatus = Internship::selectRaw('status, COUNT(*) AS total')
+            ->groupBy('status')
+            ->pluck('total', 'status');
+
         return response()->json([
             'success' => true,
             'data' => [
@@ -21,7 +28,42 @@ class AdminController extends Controller
                 'total_employers' => Employer::count(),
                 'total_companies' => Company::count(),
                 'pending_users' => User::where('status', 'Pending')->count(),
+
+                'total_internships' => (int) $byStatus->sum(),
+                'published_internships' => (int) $byStatus->get('Published', 0),
+                'draft_internships' => (int) $byStatus->get('Draft', 0),
+                'closed_internships' => (int) $byStatus->get('Closed', 0),
+                'total_vacancies' => (int) Internship::sum('vacancies'),
             ],
+        ]);
+    }
+
+    /**
+     * Every posting on the platform, including Draft and Closed ones that the
+     * public /api/internships endpoint deliberately hides.
+     */
+    public function listInternships(Request $request)
+    {
+        $query = Internship::with('company:company_id,company_name')
+            ->withCount('applications');
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->query('status'));
+        }
+
+        if ($request->filled('q')) {
+            $term = '%' . $request->query('q') . '%';
+            $query->where(function ($q) use ($term) {
+                $q->where('title', 'like', $term)
+                    ->orWhereHas('company', fn ($c) => $c->where('company_name', 'like', $term));
+            });
+        }
+
+        $perPage = min((int) $request->query('per_page', 15), 100) ?: 15;
+
+        return response()->json([
+            'success' => true,
+            'data' => $query->orderByDesc('internship_id')->paginate($perPage),
         ]);
     }
 

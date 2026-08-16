@@ -21,6 +21,7 @@
         <a href="#" class="logo">Intern<span>—</span>Hub</a>
         <nav class="nav">
             <a href="#work">Internships</a>
+            <a href="{{ url('/internships') }}">Browse Internships</a>
             <a href="#how">How It Works</a>
             <a href="#about">About</a>
             <a href="#contact">Contact</a>
@@ -34,7 +35,15 @@
                     <span class="nav-user__name" id="nav-user-name"></span>
                 </button>
                 <div class="nav-user__dropdown">
+                    <a href="{{ url('/employer/internships') }}" id="nav-employer-link" style="display:none;">My Postings</a>
+                    <a href="{{ url('/student/applications') }}" id="nav-student-link" style="display:none;">My Applications</a>
+                    <a href="{{ url('/student/bookmarks') }}" id="nav-student-bookmarks-link" style="display:none;">My Bookmarks</a>
+                    <a href="{{ url('/admin/dashboard') }}" id="nav-admin-dashboard-link" style="display:none;">Admin Dashboard</a>
                     <a href="{{ url('/profile') }}">Settings</a>
+                    <a href="{{ url('/evaluations/create') }}" id="nav-eval-write-link" style="display:none;">Evaluate An Intern</a>
+                    <a href="{{ url('/admin/evaluations') }}" id="nav-eval-review-link" style="display:none;">Review Queue</a>
+                    <a href="{{ url('/admin/criteria') }}" id="nav-eval-criteria-link" style="display:none;">Evaluation Criteria</a>
+                    <a href="{{ url('/performance') }}" id="nav-eval-perf-link" style="display:none;">Performance</a>
                     <button type="button" id="nav-logout-btn">Log Out</button>
                 </div>
             </div>
@@ -59,14 +68,16 @@
                 <div class="details__meta" data-category="finance">
                     <div class="details__meta-item"> <!-- No. of companies registered in this section -->
                         <span class="details__meta-value" data-metric="companies">—</span>
+                        <span class="details__meta-label">Companies</span>
                     </div>
                     <div class="details__meta-item"><!-- No. of jobs available -->
                         <span class="details__meta-value" data-metric="jobs">Soon</span>
+                        <span class="details__meta-label">Jobs</span>
                     </div>
 
                 </div>
                 <p class="details__description">Gain hands-on experience in budgeting, reporting, and financial analysis while supporting real client accounts.</p>
-                <a href="#contact" class="btn-view">
+                <a href="{{ url('/internships') }}?category=Finance" class="btn-view">
                     Apply Now
                     <svg viewBox="0 0 14 14" fill="none">
                         <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
@@ -90,14 +101,16 @@
                 <div class="details__meta" data-category="biotechnology">
                     <div class="details__meta-item"> <!-- No. of companies registered in this section -->
                         <span class="details__meta-value" data-metric="companies">—</span>
+                        <span class="details__meta-label">Companies</span>
                     </div>
                     <div class="details__meta-item"><!-- No. of jobs available -->
                         <span class="details__meta-value" data-metric="jobs">Soon</span>
+                        <span class="details__meta-label">Jobs</span>
                     </div>
 
                 </div>
                 <p class="details__description">Work with research teams on experiments, documentation, and innovation projects in a fast-moving science environment.</p>
-                <a href="#contact" class="btn-view">
+                <a href="{{ url('/internships') }}?category=Biotechnology" class="btn-view">
                     Apply Now
                     <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
@@ -121,13 +134,15 @@
                 <div class="details__meta" data-category="it">
                     <div class="details__meta-item"> <!-- No. of companies registered in this section -->
                         <span class="details__meta-value" data-metric="companies">—</span>
+                        <span class="details__meta-label">Companies</span>
                     </div>
                     <div class="details__meta-item"><!-- No. of jobs available -->
                         <span class="details__meta-value" data-metric="jobs">Soon</span>
+                        <span class="details__meta-label">Jobs</span>
                     </div>
                 </div>
                 <p class="details__description">Build, test, and improve digital products while learning modern development practices from experienced mentors.</p>
-                <a href="#contact" class="btn-view">
+                <a href="{{ url('/internships') }}?category=IT" class="btn-view">
                     Apply Now
                     <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
@@ -151,13 +166,15 @@
                 <div class="details__meta" data-category="engineering">
                     <div class="details__meta-item"> <!-- No. of companies registered in this section -->
                         <span class="details__meta-value" data-metric="companies">—</span>
+                        <span class="details__meta-label">Companies</span>
                     </div>
                     <div class="details__meta-item"><!-- No. of jobs available -->
                         <span class="details__meta-value" data-metric="jobs">Soon</span>
+                        <span class="details__meta-label">Jobs</span>
                     </div>
                 </div>
                 <p class="details__description">Explore design systems, prototyping, and project planning through hands-on engineering assignments.</p>
-                <a href="#contact" class="btn-view">
+                <a href="{{ url('/internships') }}?category=Engineering" class="btn-view">
                     Apply Now
                     <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
@@ -181,13 +198,15 @@
                 <div class="details__meta" data-category="healthcare">
                     <div class="details__meta-item"> <!-- No. of companies registered in this section -->
                         <span class="details__meta-value" data-metric="companies">—</span>
+                        <span class="details__meta-label">Companies</span>
                     </div>
                     <div class="details__meta-item"><!-- No. of jobs available -->
                         <span class="details__meta-value" data-metric="jobs">Soon</span>
+                        <span class="details__meta-label">Jobs</span>
                     </div>
                 </div>
                 <p class="details__description">Support patient-facing operations and health innovation programs while learning how the sector works in practice.</p>
-                <a href="#contact" class="btn-view">
+                <a href="{{ url('/internships') }}?category=Healthcare" class="btn-view">
                     Apply Now
                     <svg viewBox="0 0 14 14" fill="none">
                         <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
@@ -250,19 +269,6 @@
         <div class="ext-container ext-explore-layout">
             <div id="ext-company-carousel" class="ext-carousel">
                 <p class="ext-explore-empty">Loading companies…</p>
-            </div>
-
-            <div class="ext-sidebar">
-                <div class="ext-sidebar__head">
-                    <h3>Browse By Category</h3>
-                </div>
-                <ul class="ext-sidebar__list">
-                    <li><a href="#work">Finance & Accounting</a></li>
-                    <li><a href="#work">Biotechnology</a></li>
-                    <li><a href="#work">Information Technology</a></li>
-                    <li><a href="#work">Engineering</a></li>
-                    <li><a href="#work">Healthcare</a></li>
-                </ul>
             </div>
         </div>
     </section>
@@ -468,6 +474,38 @@
                     renderCompanyCarousel([]);
                 });
 
+            // Same idea for the "jobs available" figure — tally published
+            // internships per category from the search API.
+            fetch('{{ url('/api/internships') }}?per_page=100', { headers: { Accept: 'application/json' } })
+                .then((res) => (res.ok ? res.json() : Promise.reject()))
+                .then((json) => {
+                    const internships = (json.data && json.data.data) || [];
+                    const counts = { finance: 0, biotechnology: 0, it: 0, engineering: 0, healthcare: 0 };
+
+                    internships.forEach((internship) => {
+                        const haystack = [internship.category, internship.title, internship.description]
+                            .filter(Boolean)
+                            .join(' ')
+                            .toLowerCase();
+                        Object.keys(categoryKeywords).forEach((category) => {
+                            if (categoryKeywords[category].some((kw) => haystack.includes(kw))) {
+                                counts[category]++;
+                            }
+                        });
+                    });
+
+                    document.querySelectorAll('[data-category]').forEach((el) => {
+                        const category = el.dataset.category;
+                        const valueEl = el.querySelector('[data-metric="jobs"]');
+                        if (valueEl) {
+                            valueEl.textContent = counts[category] ?? 0;
+                        }
+                    });
+                })
+                .catch(() => {
+                    // API unreachable — leave the "Soon" placeholder in place.
+                });
+
             function renderCompanyCarousel(companies) {
                 const carousel = document.getElementById('ext-company-carousel');
                 if (!carousel) return;
@@ -539,6 +577,27 @@
                     document.getElementById('nav-auth-links').classList.add('is-hidden');
                     document.getElementById('nav-user-widget').classList.add('is-visible');
                     document.getElementById('nav-user-name').textContent = displayName;
+
+                    const role = localStorage.getItem('internhub_role');
+                    const show = (id) => {
+                        const el = document.getElementById(id);
+                        if (el) el.style.display = 'block';
+                    };
+
+                    if (role === 'Employer') {
+                        show('nav-employer-link');
+                        show('nav-eval-write-link');
+                        show('nav-eval-perf-link');
+                    } else if (role === 'Student') {
+                        show('nav-student-link');
+                        show('nav-student-bookmarks-link');
+                        show('nav-eval-perf-link');
+                    } else if (role === 'Admin') {
+                        show('nav-admin-dashboard-link');
+                        show('nav-eval-review-link');
+                        show('nav-eval-criteria-link');
+                        show('nav-eval-perf-link');
+                    }
 
                     const avatarEl = document.getElementById('nav-user-avatar');
                     if (user.profile_picture_url) {

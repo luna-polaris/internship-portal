@@ -258,16 +258,12 @@
 
 /* --- FEATURED COMPANIES (from tm-section-4 carousel + sidebar) --- */
 .ext-explore-layout {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 40px;
     margin-top: 48px;
-    align-items: start;
 }
 
 .ext-carousel {
     display: flex;
-    gap: 20px;
+    gap: 28px;
     overflow-x: auto;
     padding-bottom: 12px;
     scrollbar-width: thin;
@@ -283,33 +279,33 @@
 }
 
 .ext-company-card {
-    flex: 0 0 240px;
+    flex: 0 0 340px;
     background: var(--carbon);
     border: 1px solid var(--seam);
-    padding: 24px;
+    padding: 36px;
 }
 
 .ext-company-card__industry {
     font-family: var(--font-mono);
-    font-size: 0.6rem;
+    font-size: 0.7rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--neon-chartreuse);
-    margin-bottom: 10px;
+    margin-bottom: 14px;
 }
 
 .ext-company-card__name {
     font-family: var(--font-spine);
-    font-size: 1.1rem;
+    font-size: 1.5rem;
     text-transform: uppercase;
     color: var(--off-white);
-    margin-bottom: 8px;
-    line-height: 1.1;
+    margin-bottom: 12px;
+    line-height: 1.15;
 }
 
 .ext-company-card__meta {
     font-family: var(--font-mono);
-    font-size: 0.7rem;
+    font-size: 0.85rem;
     color: var(--ash);
 }
 
@@ -319,51 +315,6 @@
     color: var(--ash);
     padding: 24px;
     border: 1px dashed var(--steel);
-}
-
-.ext-sidebar {
-    background: var(--carbon);
-    border: 1px solid var(--seam);
-}
-
-.ext-sidebar__head {
-    background: var(--neon-chartreuse);
-    color: var(--carbon);
-    padding: 20px 24px;
-}
-
-.ext-sidebar__head h3 {
-    font-family: var(--font-spine);
-    font-size: 1.1rem;
-    text-transform: uppercase;
-}
-
-.ext-sidebar__list {
-    list-style: none;
-}
-
-.ext-sidebar__list li a {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 24px;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: rgba(240, 240, 240, 0.7);
-    text-decoration: none;
-    border-bottom: 1px solid var(--seam);
-    transition: color 0.3s var(--ease-heavy), padding-left 0.3s var(--ease-heavy);
-}
-
-.ext-sidebar__list li:last-child a {
-    border-bottom: none;
-}
-
-.ext-sidebar__list li a:hover {
-    color: var(--neon-chartreuse);
-    padding-left: 30px;
 }
 
 /* --- GET IN TOUCH (from tm-section-6 map + form) --- */
@@ -470,7 +421,6 @@
     }
 
     .ext-features-grid,
-    .ext-explore-layout,
     .ext-contact-layout,
     .ext-contact-grid {
         grid-template-columns: 1fr;

@@ -53,20 +53,51 @@ php artisan migrate
 structure, useful if you ever want to import by hand instead — but
 `php artisan migrate` is the real source of truth and the recommended path.
 
-## 5. Seed the Admin account and link storage
+## 5. Seed the data and link storage
 
 ```bash
-php artisan db:seed --class=AdminSeeder
+php artisan db:seed
 php artisan storage:link
 ```
 
-The seeder creates one Admin account from `ADMIN_USERNAME` / `ADMIN_EMAIL` /
-`ADMIN_PASSWORD` in your `.env`. Admins log in from the login page's
-**Admin** tab using that username (not email) — this is a separate, dedicated
-flow from the Student/Employer email login on purpose.
+`db:seed` runs everything registered in `DatabaseSeeder`:
+
+| # | Seeder | Creates |
+|---|---|---|
+| 1 | `AdminSeeder` | 1 Admin account from `ADMIN_USERNAME` / `ADMIN_EMAIL` / `ADMIN_PASSWORD` in your `.env` |
+| 2 | `EvaluationCriteriaSeeder` | 7 default evaluation criteria (weights total 100) |
+| 3 | `InternshipSeeder` | **10 companies** — each with its own Employer login — and **25 published internship postings**, 5 per category |
+
+Admins log in from the login page's **Admin** tab using the username (not
+email) — a separate flow from the Student/Employer email login on purpose.
+
+The 10 seeded employer accounts all use the password `password123`, with
+emails like `hr@meridiancapital.demo` and `talent@quantumbyte.demo` (see
+`database/seeders/InternshipSeeder.php` for the full list). They exist so
+`/internships` isn't empty out of the box and so you can log in as an
+employer without registering one first.
+
+All seeders are **idempotent** — re-running `php artisan db:seed` skips
+anything already present rather than creating duplicates, so it's safe to
+run again at any time.
+
+To run just one seeder:
+
+```bash
+php artisan db:seed --class=InternshipSeeder
+```
 
 `storage:link` creates `public/storage`, which is required for uploaded
 avatars/logos/resumes to actually be reachable by URL.
+
+### Resetting to a clean slate
+
+To wipe everything and rebuild from scratch (**destroys all data**, including
+any accounts you registered while testing):
+
+```bash
+php artisan migrate:fresh --seed
+```
 
 ## 6. Run the app
 

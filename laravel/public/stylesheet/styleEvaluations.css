@@ -1,0 +1,256 @@
+/* ============================================================
+   Module 3.2 — Feedback & Performance Evaluation
+   Dark theme matched to stylePublic.css. Only --neon-chartreuse
+   and --off-white are borrowed; everything else is defined here
+   with fallbacks so this file is safe to drop in on its own.
+   ============================================================ */
+
+.eval-body {
+    --eval-ink:        var(--off-white, #f2f2f0);
+    --eval-accent:     var(--neon-chartreuse, #d8ff3e);
+    --eval-bg:         #0d0d0d;
+    --eval-surface:    #171717;
+    --eval-surface-2:  #1f1f1f;
+    --eval-line:       #2e2e2e;
+    --eval-muted:      #8b8b86;
+    --eval-warn:       #e8b339;
+    --eval-bad:        #ff6b5e;
+
+    background: var(--eval-bg);
+    color: var(--eval-ink);
+    font-family: 'Space Mono', monospace;
+    margin: 0;
+}
+
+.eval-main {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 3.5rem 1.5rem 4rem;
+}
+
+/* --- Page header --- */
+.eval-pagehead { margin-bottom: 2rem; }
+
+.eval-title {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    letter-spacing: .02em;
+    text-transform: uppercase;
+    margin: 0 0 .5rem;
+}
+
+.eval-lede {
+    color: var(--eval-muted);
+    max-width: 62ch;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* --- Cards --- */
+.eval-card {
+    background: var(--eval-surface);
+    border: 1px solid var(--eval-line);
+    padding: 1.4rem 1.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.eval-card h2 {
+    font-family: 'Anton', sans-serif;
+    font-size: 1.15rem;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    margin: 0 0 1rem;
+}
+
+.eval-grid {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    margin-bottom: 1.25rem;
+}
+
+/* --- Stat blocks --- */
+.eval-stat-label {
+    color: var(--eval-muted);
+    font-size: .7rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    margin-bottom: .5rem;
+}
+
+.eval-stat {
+    font-family: 'Anton', sans-serif;
+    font-size: 2.6rem;
+    line-height: 1;
+    color: var(--eval-accent);
+}
+
+/* --- Tables --- */
+.eval-card table { width: 100%; border-collapse: collapse; }
+
+.eval-card th {
+    text-align: left;
+    color: var(--eval-muted);
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    padding: .5rem .6rem;
+    border-bottom: 1px solid var(--eval-line);
+}
+
+.eval-card td {
+    padding: .8rem .6rem;
+    border-bottom: 1px solid var(--eval-line);
+    font-size: .9rem;
+}
+
+.eval-card tr:last-child td { border-bottom: none; }
+
+/* --- Score bar --- */
+.eval-bar {
+    background: var(--eval-surface-2);
+    height: 6px;
+    min-width: 120px;
+    overflow: hidden;
+}
+
+.eval-bar span { display: block; height: 100%; background: var(--eval-accent); }
+
+/* --- Status pills --- */
+.eval-pill {
+    display: inline-block;
+    padding: .2rem .6rem;
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    border: 1px solid currentColor;
+}
+
+.eval-pill-Draft     { color: var(--eval-muted); }
+.eval-pill-Submitted { color: var(--eval-warn); }
+.eval-pill-Approved  { color: var(--eval-accent); }
+.eval-pill-Rejected  { color: var(--eval-bad); }
+
+/* Internship posting statuses (admin dashboard) */
+.eval-pill-Published { color: var(--eval-accent); }
+.eval-pill-Closed    { color: var(--eval-bad); }
+
+/* --- Forms --- */
+.eval-main label {
+    display: block;
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--eval-muted);
+    margin: 1.3rem 0 .45rem;
+}
+
+.eval-main input,
+.eval-main select,
+.eval-main textarea {
+    font: inherit;
+    width: 100%;
+    padding: .65rem .75rem;
+    background: var(--eval-bg);
+    border: 1px solid var(--eval-line);
+    color: var(--eval-ink);
+}
+
+.eval-main input:focus,
+.eval-main select:focus,
+.eval-main textarea:focus {
+    outline: none;
+    border-color: var(--eval-accent);
+}
+
+.eval-btn {
+    font: inherit;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: .7rem 1.4rem;
+    background: var(--eval-accent);
+    color: #0d0d0d;
+    border: 1px solid var(--eval-accent);
+    cursor: pointer;
+}
+
+.eval-btn--ghost { background: transparent; color: var(--eval-accent); }
+.eval-btn:disabled { opacity: .45; cursor: not-allowed; }
+.eval-btn:hover:not(:disabled) { filter: brightness(1.12); }
+
+/* --- Criterion block on the scoring form --- */
+.eval-criterion {
+    border: 1px solid var(--eval-line);
+    padding: 1rem;
+    margin-bottom: .75rem;
+}
+
+.eval-criterion__head {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: baseline;
+    flex-wrap: wrap;
+}
+
+.eval-criterion__name { font-weight: 700; letter-spacing: .02em; }
+
+.eval-criterion__weight {
+    color: var(--eval-muted);
+    font-size: .74rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.eval-criterion__desc {
+    color: var(--eval-muted);
+    font-size: .84rem;
+    line-height: 1.5;
+    margin: .5rem 0 .75rem;
+}
+
+.eval-criterion__inputs {
+    display: flex;
+    gap: .75rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.eval-criterion__inputs input[type="number"] { width: 6rem; flex: none; }
+.eval-criterion__inputs input[type="text"] { flex: 1; min-width: 12rem; }
+.eval-criterion__scale { color: var(--eval-muted); font-size: .8rem; white-space: nowrap; }
+
+/* --- Feedback states --- */
+.eval-flash { display: none; padding: .85rem 1rem; margin-bottom: 1.25rem; border-left: 3px solid; }
+.eval-flash.is-ok  { display: block; color: var(--eval-accent); background: rgba(216,255,62,.07); }
+.eval-flash.is-bad { display: block; color: var(--eval-bad);    background: rgba(255,107,94,.08); }
+
+.eval-empty { color: var(--eval-muted); text-align: center; padding: 2rem 0; }
+.eval-empty a { color: var(--eval-accent); }
+.eval-err { color: var(--eval-bad); font-size: .82rem; margin: .4rem 0 0; }
+
+.eval-note { color: var(--eval-muted); font-size: .85rem; line-height: 1.6; }
+.eval-note strong { color: var(--eval-ink); }
+
+/* --- Nav badge --- */
+.eval-badge {
+    display: inline-block;
+    min-width: 1.35em;
+    padding: 0 .35em;
+    background: var(--eval-accent);
+    color: #0d0d0d;
+    font-size: .68rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.eval-actions { display: flex; gap: .75rem; margin-top: 1.6rem; flex-wrap: wrap; }
+
+@media (max-width: 640px) {
+    .eval-main { padding: 2.5rem 1rem 3rem; }
+    .eval-card { padding: 1.1rem; }
+}

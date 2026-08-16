@@ -13,6 +13,7 @@ use App\Models\Company;
 use App\Models\Employer;
 use App\Models\Student;
 use App\Models\User;
+use App\Support\EmailMasker;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -87,6 +88,9 @@ class AuthController extends Controller
             'success' => true,
             'message' => 'Registration successful. Please verify your email to activate your account.',
             'user_id' => $user->user_id,
+            // Masked, not the raw address — enough for the user to confirm
+            // where the link went without echoing the full address back.
+            'masked_email' => EmailMasker::mask($user->email),
         ];
 
         // MAIL_MAILER=log by default (no real SMTP configured), so nothing

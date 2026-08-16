@@ -1,0 +1,169 @@
+/* Shared list/card/badge components for the internship + application pages.
+   Reuses the design tokens from stylePublic.css (:root vars) and layout
+   primitives from styleAuth.css (.auth-header, .auth-main, body.auth-body). */
+
+.app-main {
+    flex: 1;
+    padding: 3rem 1.5rem 5rem;
+    max-width: 1080px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.app-heading {
+    font-family: var(--font-spine);
+    font-size: 2rem;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.app-subtitle {
+    color: var(--ash);
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+}
+
+/* Filter bar */
+.filter-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    background: var(--graphite);
+    border: 1px solid var(--seam);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.filter-bar .field-group {
+    margin-bottom: 0;
+}
+
+.filter-bar .btn-submit {
+    align-self: end;
+}
+
+/* Card grid + list card */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+}
+
+.list-card {
+    background: var(--graphite);
+    border: 1px solid var(--seam);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.list-card h3 {
+    font-family: var(--font-spine);
+    font-size: 1.25rem;
+    text-transform: uppercase;
+    color: var(--off-white);
+}
+
+.list-card a.card-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+.list-card a.card-link:hover h3 {
+    color: var(--neon-chartreuse);
+}
+
+.list-card__meta {
+    color: var(--ash);
+    font-size: 0.85rem;
+}
+
+.list-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 0.5rem;
+}
+
+.list-card__empty {
+    color: var(--ash);
+    font-size: 0.9rem;
+    padding: 2rem 0;
+}
+
+/* Badges */
+.badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.3rem 0.6rem;
+    border: 1px solid var(--steel);
+    color: var(--ash);
+    width: fit-content;
+}
+
+.badge-draft { border-color: var(--steel); color: var(--ash); }
+.badge-published { border-color: var(--neon-chartreuse); color: var(--neon-chartreuse); }
+.badge-closed { border-color: #dc3c3c; color: #ff9c9c; }
+.badge-pending { border-color: var(--steel); color: var(--ash); }
+.badge-accepted { border-color: var(--neon-chartreuse); color: var(--neon-chartreuse); }
+.badge-rejected { border-color: #dc3c3c; color: #ff9c9c; }
+.badge-withdrawn { border-color: var(--steel); color: var(--ash); }
+
+/* Buttons */
+.btn-secondary,
+.btn-danger {
+    background: transparent;
+    border: 1px solid var(--steel);
+    color: var(--off-white);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.btn-secondary:hover {
+    border-color: var(--neon-chartreuse);
+    color: var(--neon-chartreuse);
+}
+
+.btn-danger {
+    border-color: #dc3c3c;
+    color: #ff9c9c;
+}
+
+.btn-danger:hover {
+    opacity: 0.8;
+}
+
+.btn-secondary:disabled,
+.btn-danger:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 2rem;
+}
+
+/* Toggle for collapsible "New Posting" form */
+.toggle-form-btn {
+    margin-bottom: 1.5rem;
+}
+
+.collapsible {
+    display: none;
+}
+
+.collapsible.open {
+    display: block;
+}

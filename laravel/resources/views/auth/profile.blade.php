@@ -37,6 +37,59 @@
                 <button type="button" class="btn-submit" id="avatar-submit">Upload Picture</button>
             </fieldset>
 
+            <!-- Resume (Students only) -->
+            <fieldset id="resume-section" style="display:none;">
+                <legend>Resume</legend>
+                <p id="resume-current" class="field-hint" style="margin-bottom:0.75rem;"></p>
+                <input type="file" id="resume-input" accept=".pdf,.doc,.docx">
+                <p class="field-hint">PDF, DOC, or DOCX. Max 5MB. Required before applying to internships.</p>
+                <button type="button" class="btn-submit" id="resume-submit" style="margin-top:1rem;">Upload Resume</button>
+            </fieldset>
+
+            <!-- Recommendation Preferences (Students only) -->
+            <form id="student-profile-form" novalidate style="display:none;">
+                <fieldset>
+                    <legend>Academic &amp; Recommendation Preferences</legend>
+                    <p class="field-hint" style="margin-bottom:1rem;">This information powers your Recommended Internships list on the Browse page.</p>
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label for="programme">Programme</label>
+                            <input type="text" id="programme" name="programme" maxlength="100">
+                        </div>
+                        <div class="field-group">
+                            <label for="faculty">Faculty</label>
+                            <input type="text" id="faculty" name="faculty" maxlength="100">
+                        </div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label for="cgpa">CGPA</label>
+                            <input type="number" id="cgpa" name="cgpa" min="0" max="4" step="0.01">
+                        </div>
+                        <div class="field-group">
+                            <label for="graduation_year">Graduation Year</label>
+                            <input type="number" id="graduation_year" name="graduation_year" min="2000" max="2100">
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label for="skills">Skills</label>
+                        <input type="text" id="skills" name="skills" placeholder="e.g. PHP, Laravel, SQL">
+                        <p class="field-hint">Comma-separated.</p>
+                    </div>
+                    <div class="field-group">
+                        <label for="interests">Interests</label>
+                        <input type="text" id="interests" name="interests" placeholder="e.g. Web Development, Finance">
+                        <p class="field-hint">Comma-separated.</p>
+                    </div>
+                    <div class="field-group">
+                        <label for="preferred_locations">Preferred Locations</label>
+                        <input type="text" id="preferred_locations" name="preferred_locations" placeholder="e.g. Kuala Lumpur, Selangor">
+                        <p class="field-hint">Comma-separated.</p>
+                    </div>
+                </fieldset>
+                <button type="submit" class="btn-submit">Save Preferences</button>
+            </form>
+
             <!-- Full Name -->
             <form id="fullname-form" novalidate>
                 <fieldset>
@@ -70,16 +123,28 @@
             <form id="password-form" novalidate>
                 <fieldset>
                     <legend>Change Password</legend>
+
+                    <div class="field-group">
+                        <label for="old_password">Current Password</label>
+                        <input type="password" id="old_password" name="old_password" required>
+                        <p class="field-hint">Required &mdash; confirms it&rsquo;s really you before the password is changed.</p>
+                    </div>
+
                     <div class="field-row">
                         <div class="field-group">
-                            <label for="old_password">Current Password</label>
-                            <input type="password" id="old_password" name="old_password" required>
+                            <label for="new_password">New Password</label>
+                            <input type="password" id="new_password" name="new_password" required minlength="12">
                         </div>
                         <div class="field-group">
-                            <label for="new_password">New Password</label>
-                            <input type="password" id="new_password" name="new_password" required minlength="8">
+                            <label for="new_password_confirmation">Confirm New Password</label>
+                            <input type="password" id="new_password_confirmation" name="new_password_confirmation" required minlength="12">
                         </div>
                     </div>
+
+                    <p class="field-hint">
+                        New password must be at least 12 characters and include an uppercase
+                        letter, a lowercase letter, a number, and a special character.
+                    </p>
                 </fieldset>
                 <button type="submit" class="btn-submit">Change Password</button>
             </form>
@@ -101,7 +166,8 @@
             pageAlert.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
-        function applyUser(user) {
+        function applyUser(profile) {
+            const user = profile.user;
             document.getElementById('full_name').value = user.full_name || '';
             document.getElementById('email').value = user.email || '';
 
@@ -114,12 +180,46 @@
                 preview.style.backgroundImage = 'none';
                 preview.textContent = displayName.trim().charAt(0).toUpperCase();
             }
+
+            if (localStorage.getItem('internhub_role') === 'Student') {
+                document.getElementById('resume-section').style.display = 'block';
+                const resumeCurrent = document.getElementById('resume-current');
+                resumeCurrent.innerHTML = profile.resume
+                    ? `Current resume: <a href="{{ url('/storage') }}/${profile.resume}" target="_blank" style="color:var(--neon-chartreuse);">View uploaded resume</a>`
+                    : 'No resume uploaded yet.';
+            }
+        }
+
+        function listToText(values) {
+            return Array.isArray(values) ? values.join(', ') : '';
+        }
+
+        function textToList(value) {
+            return value.split(',').map((v) => v.trim()).filter((v) => v !== '');
+        }
+
+        function applyStudentProfile(student) {
+            document.getElementById('student-profile-form').style.display = 'block';
+            document.getElementById('programme').value = student.programme || '';
+            document.getElementById('faculty').value = student.faculty || '';
+            document.getElementById('cgpa').value = student.cgpa ?? '';
+            document.getElementById('graduation_year').value = student.graduation_year || '';
+            document.getElementById('skills').value = listToText(student.skills);
+            document.getElementById('interests').value = listToText(student.interests);
+            document.getElementById('preferred_locations').value = listToText(student.preferred_locations);
         }
 
         fetch('{{ url('/api/me') }}', { headers: authHeaders })
             .then((res) => (res.ok ? res.json() : Promise.reject()))
-            .then((json) => applyUser(json.data.user))
+            .then((json) => applyUser(json.data))
             .catch(() => showAlert('Could not load your profile. Try logging in again.', 'error'));
+
+        if (localStorage.getItem('internhub_role') === 'Student') {
+            fetch('{{ url('/api/student/profile') }}', { headers: authHeaders })
+                .then((res) => (res.ok ? res.json() : Promise.reject()))
+                .then((json) => applyStudentProfile(json.data))
+                .catch(() => {});
+        }
 
         async function submitJson(url, method, body) {
             const response = await fetch(url, {
@@ -139,6 +239,20 @@
             showAlert(ok ? data.message : (data.errors ? Object.values(data.errors)[0][0] : data.message), ok ? 'success' : 'error');
         });
 
+        document.getElementById('student-profile-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const { ok, data } = await submitJson('{{ url('/api/student/profile') }}', 'PUT', {
+                programme: document.getElementById('programme').value || null,
+                faculty: document.getElementById('faculty').value || null,
+                cgpa: document.getElementById('cgpa').value || null,
+                graduation_year: document.getElementById('graduation_year').value || null,
+                skills: textToList(document.getElementById('skills').value),
+                interests: textToList(document.getElementById('interests').value),
+                preferred_locations: textToList(document.getElementById('preferred_locations').value),
+            });
+            showAlert(ok ? data.message : (data.errors ? Object.values(data.errors)[0][0] : data.message), ok ? 'success' : 'error');
+        });
+
         document.getElementById('email-form').addEventListener('submit', async (event) => {
             event.preventDefault();
             const { ok, data } = await submitJson('{{ url('/api/me/email') }}', 'PUT', {
@@ -154,6 +268,7 @@
             const { ok, data } = await submitJson('{{ url('/api/password/change') }}', 'POST', {
                 old_password: document.getElementById('old_password').value,
                 new_password: document.getElementById('new_password').value,
+                new_password_confirmation: document.getElementById('new_password_confirmation').value,
             });
             showAlert(ok ? data.message : (data.errors ? Object.values(data.errors)[0][0] : data.message), ok ? 'success' : 'error');
             if (ok) document.getElementById('password-form').reset();
@@ -190,6 +305,38 @@
                 showAlert('Network error. Please try again.', 'error');
             }
         });
+
+        document.getElementById('resume-submit').addEventListener('click', async () => {
+            const fileInput = document.getElementById('resume-input');
+            if (!fileInput.files.length) {
+                showAlert('Choose a resume file first.', 'error');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('resume', fileInput.files[0]);
+
+            try {
+                const response = await fetch('{{ url('/api/student/resume') }}', {
+                    method: 'POST',
+                    headers: authHeaders,
+                    body: formData,
+                });
+                const data = await response.json();
+
+                if (!response.ok) {
+                    showAlert(data.errors ? Object.values(data.errors)[0][0] : data.message, 'error');
+                    return;
+                }
+
+                document.getElementById('resume-current').innerHTML = `Current resume: <a href="{{ url('/storage') }}/${data.path}" target="_blank" style="color:var(--neon-chartreuse);">View uploaded resume</a>`;
+                showAlert(data.message, 'success');
+            } catch (err) {
+                showAlert('Network error. Please try again.', 'error');
+            }
+        });
     </script>
+
+    <script src="{{ asset('scripts/passwordToggle.js') }}"></script>
 </body>
 </html>

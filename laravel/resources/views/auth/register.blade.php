@@ -19,10 +19,36 @@
 
     <main class="auth-main">
         <div class="auth-card wide">
-            <h1>Create Account</h1>
-            <p class="auth-subtitle">Register as a student looking for internships, or an employer looking to hire.</p>
+            <h1 id="register-heading">Create Account</h1>
+            <p class="auth-subtitle" id="register-intro">
+                Register as a student looking for internships, or an employer looking to hire.<br>
+                Fields marked <span class="req">*</span> are required.
+            </p>
 
             <div id="alert-box" class="alert"></div>
+
+            <!-- Shown in place of the form once registration succeeds. The account
+                 is created with status=Pending and cannot log in until the emailed
+                 link is clicked, so this needs to be unmissable rather than a
+                 message that flashes past on the way to the login page. -->
+            <div id="register-success" class="verify-panel" role="status" aria-live="polite">
+                <div class="verify-panel__icon" aria-hidden="true">&#10003;</div>
+                <h2 class="verify-panel__title">Account created</h2>
+                <p class="verify-panel__lead">
+                    We&rsquo;ve sent a verification link to
+                    <strong id="verify-email-address"></strong>
+                </p>
+                <hr class="verify-panel__divider">
+                <p class="verify-panel__text">
+                    <strong>You must click that link before you can log in.</strong>
+                    Your account stays inactive until the email address is verified.
+                </p>
+                <p class="verify-panel__text verify-panel__muted">
+                    The link expires in 24 hours. If it isn&rsquo;t in your inbox,
+                    check your spam or junk folder.
+                </p>
+                <a href="{{ url('/login') }}" class="btn-submit verify-panel__cta">Go to Login</a>
+            </div>
 
             <div class="role-switch" role="tablist" aria-label="Register as">
                 <button type="button" id="tab-student" aria-selected="true" data-role="Student">Student</button>
@@ -37,29 +63,36 @@
 
                     <div class="field-row">
                         <div class="field-group">
-                            <label for="full_name">Full Name</label>
+                            <label for="full_name">Full Name <span class="req">*</span></label>
                             <input type="text" id="full_name" name="full_name" required maxlength="100">
                         </div>
                         <div class="field-group">
                             <label for="phone">Phone</label>
-                            <input type="tel" id="phone" name="phone" maxlength="20">
+                            <input type="tel" id="phone" name="phone" maxlength="11">
+                            <p class="field-hint">Starts with 01, 10&ndash;11 digits total (e.g. 0123456789).</p>
                         </div>
                     </div>
 
                     <div class="field-group">
-                        <label for="email">Email</label>
+                        <label for="email">Email <span class="req">*</span></label>
                         <input type="email" id="email" name="email" required maxlength="100">
                     </div>
 
                     <div class="field-row">
                         <div class="field-group">
-                            <label for="password">Password</label>
-                            <input type="password" id="password" name="password" required minlength="8">
-                            <p class="field-hint">Minimum 8 characters.</p>
+                            <label for="password">Password <span class="req">*</span></label>
+                            <input type="password" id="password" name="password" required minlength="12">
+                            <ul class="pw-checklist" id="pw-checklist" aria-live="polite">
+                                <li data-rule="length">At least 12 characters</li>
+                                <li data-rule="upper">An uppercase letter</li>
+                                <li data-rule="lower">A lowercase letter</li>
+                                <li data-rule="number">A number</li>
+                                <li data-rule="special">A special character (e.g. ! @ # $ %)</li>
+                            </ul>
                         </div>
                         <div class="field-group">
-                            <label for="password_confirmation">Confirm Password</label>
-                            <input type="password" id="password_confirmation" name="password_confirmation" required minlength="8">
+                            <label for="password_confirmation">Confirm Password <span class="req">*</span></label>
+                            <input type="password" id="password_confirmation" name="password_confirmation" required minlength="12">
                         </div>
                     </div>
                 </fieldset>
@@ -69,7 +102,7 @@
                     <legend>Academic Details</legend>
 
                     <div class="field-group">
-                        <label for="matric_no">Matric Number</label>
+                        <label for="matric_no">Matric Number <span class="req">*</span></label>
                         <input type="text" id="matric_no" name="matric_no" maxlength="20">
                     </div>
 
@@ -97,7 +130,8 @@
 
                     <div class="field-group">
                         <label for="graduation_year">Graduation Year</label>
-                        <input type="number" id="graduation_year" name="graduation_year" min="1900" max="2100">
+                        <input type="number" id="graduation_year" name="graduation_year" min="2000" max="2050">
+                        <p class="field-hint">Between 2000 and 2050.</p>
                     </div>
                 </fieldset>
 
@@ -121,7 +155,7 @@
                     <legend>Company Details</legend>
 
                     <div class="field-group">
-                        <label for="company_name">Company Name</label>
+                        <label for="company_name">Company Name <span class="req">*</span></label>
                         <input type="text" id="company_name" name="company_name" maxlength="150">
                     </div>
 
@@ -132,14 +166,22 @@
                         </div>
                         <div class="field-group">
                             <label for="company_phone">Company Phone</label>
-                            <input type="tel" id="company_phone" name="company_phone" maxlength="20">
+                            <input type="tel" id="company_phone" name="company_phone" maxlength="11">
+                            <p class="field-hint">Starts with 01, 10&ndash;11 digits total.</p>
                         </div>
                     </div>
 
                     <div class="field-row">
                         <div class="field-group">
                             <label for="industry">Industry</label>
-                            <input type="text" id="industry" name="industry" maxlength="100">
+                            <select id="industry" name="industry">
+                                <option value="">Select an industry</option>
+                                <option value="Finance">Finance & Accounting</option>
+                                <option value="Biotechnology">Biotechnology</option>
+                                <option value="IT">Information Technology</option>
+                                <option value="Engineering">Engineering</option>
+                                <option value="Healthcare">Healthcare</option>
+                            </select>
                         </div>
                         <div class="field-group">
                             <label for="website">Website</label>
@@ -184,7 +226,7 @@
                 <button type="submit" class="btn-submit" id="submit-btn">Create Account</button>
             </form>
 
-            <p class="auth-footer-link">Already have an account? <a href="{{ url('/login') }}">Log in</a></p>
+            <p class="auth-footer-link" id="register-footer-link">Already have an account? <a href="{{ url('/login') }}">Log in</a></p>
         </div>
     </main>
 
@@ -269,6 +311,29 @@
             })();
         @endif
 
+        // --- Live password requirement checklist ---
+        // These tests mirror Laravel's Password rule (Password::min(12)
+        // ->mixedCase()->numbers()->symbols()) so the ticks can never
+        // disagree with what the server accepts on submit.
+        const passwordRules = {
+            length: (value) => value.length >= 12,
+            upper: (value) => /\p{Lu}/u.test(value),
+            lower: (value) => /\p{Ll}/u.test(value),
+            number: (value) => /\p{N}/u.test(value),
+            special: (value) => /\p{Z}|\p{S}|\p{P}/u.test(value),
+        };
+
+        const passwordInput = document.getElementById('password');
+        const checklistItems = document.querySelectorAll('#pw-checklist li');
+
+        passwordInput.addEventListener('input', () => {
+            const value = passwordInput.value;
+            checklistItems.forEach((item) => {
+                const met = passwordRules[item.dataset.rule](value);
+                item.classList.toggle('met', met);
+            });
+        });
+
         // --- Form submission ---
         const form = document.getElementById('register-form');
         const alertBox = document.getElementById('alert-box');
@@ -279,12 +344,94 @@
             alertBox.className = 'alert show alert-' + type;
         }
 
+        // Give every field its own error slot, sitting directly above the input,
+        // so validation messages appear next to the field they belong to rather
+        // than all bunched at the top of the form.
+        form.querySelectorAll('input:not([type="hidden"]), select, textarea').forEach((control) => {
+            if (!control.name) return;
+            const slot = document.createElement('p');
+            slot.className = 'field-error';
+            slot.dataset.errorFor = control.name;
+            control.parentNode.insertBefore(slot, control);
+        });
+
+        function clearFieldErrors() {
+            form.querySelectorAll('.field-error').forEach((slot) => {
+                slot.textContent = '';
+                slot.classList.remove('show');
+            });
+            form.querySelectorAll('.is-invalid').forEach((control) => {
+                control.classList.remove('is-invalid');
+            });
+        }
+
+        /**
+         * errors: { field_name: ["message", ...], ... } — Laravel's 422 shape.
+         * Anything without a matching field on this form falls back to the
+         * top alert so a message can never silently disappear.
+         */
+        function showFieldErrors(errors) {
+            let firstInvalid = null;
+            const orphaned = [];
+
+            Object.entries(errors).forEach(([field, messages]) => {
+                const list = Array.isArray(messages) ? messages : [messages];
+                const slot = form.querySelector(`.field-error[data-error-for="${field}"]`);
+                const control = form.querySelector(`[name="${field}"]`);
+
+                if (!slot) {
+                    orphaned.push(list[0]);
+                    return;
+                }
+
+                // A field can fail several rules at once (e.g. a password that is
+                // too short AND missing a symbol) — show all of them so the user
+                // fixes everything in one pass instead of one error per attempt.
+                slot.textContent = '';
+                list.forEach((message, index) => {
+                    if (index > 0) slot.appendChild(document.createElement('br'));
+                    slot.appendChild(document.createTextNode(message));
+                });
+                slot.classList.add('show');
+
+                if (control) {
+                    control.classList.add('is-invalid');
+                    if (!firstInvalid) firstInvalid = control;
+                }
+            });
+
+            if (orphaned.length) {
+                showAlert(orphaned[0], 'error');
+            }
+
+            if (firstInvalid) {
+                firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                firstInvalid.focus({ preventScroll: true });
+            }
+        }
+
+        // Clear a field's error as soon as the user starts correcting it.
+        form.addEventListener('input', (event) => {
+            const control = event.target;
+            if (!control.name || !control.classList.contains('is-invalid')) return;
+
+            control.classList.remove('is-invalid');
+            const slot = form.querySelector(`.field-error[data-error-for="${control.name}"]`);
+            if (slot) {
+                slot.textContent = '';
+                slot.classList.remove('show');
+            }
+        });
+
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
             alertBox.className = 'alert';
+            clearFieldErrors();
 
+            // Quick local check so the user doesn't wait on a round-trip for a
+            // typo; the server enforces this too via the `confirmed` rule.
             if (document.getElementById('password').value !== document.getElementById('password_confirmation').value) {
-                showAlert('Passwords do not match.', 'error');
+                showFieldErrors({ password_confirmation: ['Password confirmation does not match.'] });
                 return;
             }
 
@@ -310,13 +457,28 @@
                 const data = await response.json();
 
                 if (!response.ok) {
-                    const firstError = data.errors ? Object.values(data.errors)[0][0] : data.message;
-                    showAlert(firstError || 'Registration failed.', 'error');
+                    if (data.errors) {
+                        showFieldErrors(data.errors);
+                    } else {
+                        showAlert(data.message || 'Registration failed.', 'error');
+                    }
                     return;
                 }
 
-                showAlert(data.message + ' Redirecting to login...', 'success');
-                setTimeout(() => { window.location.href = '{{ url('/login') }}'; }, 1800);
+                // Swap the form out for the "verify your email" panel and stay
+                // put. Auto-redirecting to /login here would hide the one
+                // instruction the user has to act on, and they'd just be met
+                // with "Please verify your email" on their first login attempt.
+                // Server sends the masked form; never re-display the raw address.
+                document.getElementById('verify-email-address').textContent = data.masked_email;
+                document.getElementById('register-heading').textContent = 'Check Your Email';
+                document.getElementById('register-intro').style.display = 'none';
+                document.getElementById('register-footer-link').style.display = 'none';
+                document.querySelector('.role-switch').style.display = 'none';
+                form.style.display = 'none';
+                alertBox.className = 'alert';
+                document.getElementById('register-success').classList.add('show');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             } catch (err) {
                 showAlert('Network error. Please try again.', 'error');
             } finally {
@@ -325,5 +487,7 @@
             }
         });
     </script>
+
+    <script src="{{ asset('scripts/passwordToggle.js') }}"></script>
 </body>
 </html>
