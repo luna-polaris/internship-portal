@@ -190,14 +190,10 @@
                     </div>
 
                     <div class="field-group">
-                        <label for="address_search">Company Address <span style="text-transform:none;color:var(--steel)">(search to auto-fill city / state / postcode)</span></label>
-                        <input type="text" id="address_search" name="address" autocomplete="off" placeholder="Start typing an address...">
-                        <div id="map-picker">
-                            @if (config('services.google.maps_key'))
-                                Loading map…
-                            @else
-                                Google Maps is not configured (GOOGLE_MAPS_API_KEY is empty in .env). Fill in city / state / postcode manually below.
-                            @endif
+                        <label for="address_search">Company Address</label>
+                        <div class="address-search-wrap">
+                            <input type="text" id="address_search" name="address" autocomplete="off" placeholder="Start typing an address...">
+                            <ul id="address-suggestions" hidden></ul>
                         </div>
                     </div>
 
@@ -247,62 +243,67 @@
         });
         document.getElementById('matric_no').required = true;
 
-        let map, marker;
+        (function () {
+            const addressInput = document.getElementById('address_search');
+            const suggestions = document.getElementById('address-suggestions');
 
-        function initAutocomplete() {
-            const mapDiv = document.getElementById('map-picker');
-            mapDiv.textContent = '';
+            // This block shares a <script> with the form validation, so a missing
+            // element must not throw — that would abort the rest of the file.
+            if (!addressInput || !suggestions) return;
 
-            const center = { lat: 3.139, lng: 101.6869 }; // Kuala Lumpur placeholder, adjust as needed
-            map = new google.maps.Map(mapDiv, { center, zoom: 11 });
-            marker = new google.maps.Marker({ map, position: center });
+            function hideSuggestions() {
+                suggestions.hidden = true;
+                suggestions.innerHTML = '';
+            }
 
-            const input = document.getElementById('address_search');
-            const autocomplete = new google.maps.places.Autocomplete(input, {
-                fields: ['address_components', 'formatted_address', 'geometry'],
-            });
-            autocomplete.bindTo('bounds', map);
+            function choosePlace(place) {
+                const a = place.address || {};
+                addressInput.value = place.display_name;
+                document.getElementById('city').value = a.city || a.town || a.village || a.suburb || a.county || '';
+                document.getElementById('state').value = a.state || '';
+                document.getElementById('postcode').value = a.postcode || '';
+                hideSuggestions();
+            }
 
-            autocomplete.addListener('place_changed', () => {
-                const place = autocomplete.getPlace();
-                if (!place.geometry || !place.geometry.location) {
-                    return;
-                }
+            function renderSuggestions(places) {
+                suggestions.innerHTML = '';
+                if (!places.length) return hideSuggestions();
 
-                map.setCenter(place.geometry.location);
-                map.setZoom(15);
-                marker.setPosition(place.geometry.location);
-
-                input.value = place.formatted_address || input.value;
-
-                let city = '', state = '', postcode = '';
-                (place.address_components || []).forEach((component) => {
-                    const types = component.types;
-                    if (types.includes('locality') || types.includes('administrative_area_level_2')) {
-                        city = city || component.long_name;
-                    }
-                    if (types.includes('administrative_area_level_1')) {
-                        state = component.long_name;
-                    }
-                    if (types.includes('postal_code')) {
-                        postcode = component.long_name;
-                    }
+                places.forEach((place) => {
+                    const li = document.createElement('li');
+                    li.textContent = place.display_name;
+                    // mousedown fires before the input's blur, which would otherwise close the list first.
+                    li.addEventListener('mousedown', (e) => {
+                        e.preventDefault();
+                        choosePlace(place);
+                    });
+                    suggestions.appendChild(li);
                 });
+                suggestions.hidden = false;
+            }
 
-                document.getElementById('city').value = city;
-                document.getElementById('state').value = state;
-                document.getElementById('postcode').value = postcode;
+            let timer, lastQuery = '';
+
+            addressInput.addEventListener('input', () => {
+                clearTimeout(timer);
+                const query = addressInput.value.trim();
+                if (query.length < 4) return hideSuggestions();
+
+                // Nominatim's usage policy forbids a request per keystroke, so only search after a pause.
+                timer = setTimeout(() => {
+                    if (query === lastQuery) return;
+                    lastQuery = query;
+
+                    fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=5&countrycodes=my&q='
+                        + encodeURIComponent(query), { headers: { 'Accept-Language': 'en' } })
+                        .then((res) => (res.ok ? res.json() : Promise.reject()))
+                        .then(renderSuggestions)
+                        .catch(hideSuggestions);
+                }, 700);
             });
-        }
 
-        @if (config('services.google.maps_key'))
-            (function () {
-                const script = document.createElement('script');
-                script.src = 'https://maps.googleapis.com/maps/api/js?key={{ config('services.google.maps_key') }}&libraries=places&callback=initAutocomplete';
-                script.async = true;
-                document.head.appendChild(script);
-            })();
-        @endif
+            addressInput.addEventListener('blur', () => setTimeout(hideSuggestions, 150));
+        })();
 
         // Mirrors Laravel's Password rule (min 12, mixedCase, numbers, symbols) so the ticks never disagree with the server.
         const passwordRules = {

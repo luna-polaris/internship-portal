@@ -269,11 +269,11 @@
         </div>
         <div class="ext-container ext-contact-layout">
             <div id="ext-map">
-                @if (config('services.google.maps_key'))
-                    Loading map…
-                @else
-                    Google Maps is not configured (GOOGLE_MAPS_API_KEY is empty in .env).
-                @endif
+                <iframe
+                    title="InternHub location"
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    src="https://www.openstreetmap.org/export/embed.html?bbox=101.5869,3.089,101.7869,3.189&layer=mapnik&marker=3.1575,101.7116"></iframe>
             </div>
 
             <div class="ext-contact-card">
@@ -293,7 +293,7 @@
                     </div>
                     <div>
                         <p class="ext-contact-item-label">Location</p>
-                        <p class="ext-contact-item-value">Kuala Lumpur, Malaysia</p>
+                        <p class="ext-contact-item-value">2-80, Level 80, Petronas Twin Tower, Kuala Lumpur, Malaysia</p>
                     </div>
                 </div>
             </div>
@@ -401,7 +401,7 @@
                 </div>
                 <div class="modal__contact-item">
                     <p class="modal__contact-label">Phone</p>
-                    <p class="modal__contact-value"><a href="tel:+1234567890">+60 (123) 456-7890</a></p>
+                    <p class="modal__contact-value"><a href="tel:+601234567890">+60 (12) 3456-7890</a></p>
                 </div>
                 <div class="modal__contact-item">
                     <p class="modal__contact-label">Support</p>
@@ -409,7 +409,7 @@
                 </div>
                 <div class="modal__contact-item">
                     <p class="modal__contact-label">Location</p>
-                    <p class="modal__contact-value">Nairobi, Kenya</p>
+                    <p class="modal__contact-value">Kuala Lumpur, Malaysia</p>
                 </div>
             </div>
         </div>
@@ -518,26 +518,6 @@
         })();
 
         document.getElementById('ext-current-year').textContent = new Date().getFullYear();
-
-        function initExtMap() {
-            const mapDiv = document.getElementById('ext-map');
-            if (!mapDiv) return;
-            mapDiv.textContent = '';
-
-            new google.maps.Map(mapDiv, {
-                center: { lat: 3.139, lng: 101.6869 }, // Kuala Lumpur placeholder — replace with real office location
-                zoom: 12,
-            });
-        }
-
-        @if (config('services.google.maps_key'))
-            (function () {
-                const script = document.createElement('script');
-                script.src = 'https://maps.googleapis.com/maps/api/js?key={{ config('services.google.maps_key') }}&callback=initExtMap';
-                script.async = true;
-                document.head.appendChild(script);
-            })();
-        @endif
 
         (function () {
             const token = localStorage.getItem('internhub_token');

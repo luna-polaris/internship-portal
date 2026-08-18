@@ -37,7 +37,7 @@ Open `.env` and set at minimum:
   resumes), so a mismatch here means uploaded images won't load.
 - `ADMIN_PASSWORD` — change this from the placeholder before seeding
 
-Everything else (`MAIL_*`, `GOOGLE_MAPS_API_KEY`) is optional — see step 7.
+Everything else (`MAIL_*`) is optional — see step 7.
 
 ## 4. Create the database
 
@@ -147,12 +147,6 @@ can test the full flow without any email setup. To send real email, switch
 to `MAIL_MAILER=smtp` and fill in your own credentials (e.g. a Gmail address
 + an [App Password](https://myaccount.google.com/apppasswords) — never a
 normal account password, and never commit it).
-
-**Google Maps** on the register page's company-address picker — get a key at
-the [Google Cloud Console](https://console.cloud.google.com/google/maps-apis)
-(enable "Maps JavaScript API" + "Places API") and set
-`GOOGLE_MAPS_API_KEY`. Leave it blank and the form just falls back to plain
-text inputs for city/state/postcode — nothing breaks.
 
 ## Verifying it works
 

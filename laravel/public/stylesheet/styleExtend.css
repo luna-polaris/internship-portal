@@ -329,14 +329,14 @@
     min-height: 320px;
     border: 1px solid var(--seam);
     background: var(--carbon);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--ash);
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    text-align: center;
-    padding: 2rem;
+}
+
+#ext-map iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 320px;
+    border: 0;
 }
 
 .ext-contact-card {
