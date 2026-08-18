@@ -4,11 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/**
- * Persisted output of the recommendation engine (Module 3) — one row per
- * student/internship pair the engine considers a match, refreshed by the
- * StudentObserver/InternshipObserver instead of recomputed on every request.
- */
+/** Persisted recommendation-engine output, refreshed by StudentObserver/InternshipObserver rather than recomputed per request. */
 return new class extends Migration
 {
     public function up(): void

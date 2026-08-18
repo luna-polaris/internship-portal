@@ -2,12 +2,7 @@
 
 namespace App\Support;
 
-/**
- * Shared cleanup for the free-text list fields (skills, interests,
- * preferred locations, required skills) that feed the recommendation
- * engine — strips markup, trims, dedupes, and caps length/count so
- * neither storage nor later HTML rendering sees raw user input.
- */
+/** Shared cleanup for free-text list fields (skills, interests, locations) feeding the recommendation engine: strips markup, trims, dedupes, and caps length/count before storage. */
 class ListSanitizer
 {
     public static function toJson(mixed $value, int $maxItems = 20, int $maxLength = 50): ?string

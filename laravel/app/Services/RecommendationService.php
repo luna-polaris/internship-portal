@@ -8,15 +8,9 @@ use App\Models\Student;
 use Illuminate\Support\Collection;
 
 /**
- * Module 3 — Internship Recommendation Engine.
- *
- * A posting is only ever recommended if it's related to the student's own
- * programme/faculty — that's a hard gate, same as the CGPA floor. Skills,
- * interests, and preferred location don't create a recommendation on their
- * own; they only rank postings that already passed the programme gate.
- * Recomputation is triggered by StudentObserver (profile changed) and
- * InternshipObserver (posting published) rather than on every read — the
- * API just reads what's already stored.
+ * Programme/faculty match and the CGPA floor are hard gates — a posting failing either is never
+ * recommended. Skills, interests, and location only rank postings that already passed those gates.
+ * Recomputation happens via StudentObserver/InternshipObserver, not on every read.
  */
 class RecommendationService
 {
@@ -26,7 +20,6 @@ class RecommendationService
     private const LOCATION_WEIGHT = 2;
     private const ELIGIBILITY_WEIGHT = 1;
 
-    /** Recompute every recommendation for one student, across all open postings. */
     public function refreshForStudent(Student $student): Collection
     {
         $results = Internship::visible()->get()
@@ -40,10 +33,6 @@ class RecommendationService
         return $results->values();
     }
 
-    /**
-     * Recompute matches for one newly published posting, across every
-     * student. Returns the students who matched, for the observer to notify.
-     */
     public function refreshForInternship(Internship $internship): Collection
     {
         $results = Student::query()->get()
@@ -80,17 +69,14 @@ class RecommendationService
     /** @return array{0: float, 1: string[]} */
     private function score(Student $student, Internship $internship): array
     {
-        // A CGPA floor is a hard requirement, not a scoring factor — students
-        // below it are never recommended the posting.
+        // CGPA floor is a hard requirement, not a scoring factor.
         if ($internship->min_cgpa !== null && ($student->cgpa === null || (float) $student->cgpa < (float) $internship->min_cgpa)) {
             return [0.0, []];
         }
 
         $haystack = mb_strtolower(implode(' ', array_filter([$internship->category, $internship->title, $internship->description])));
 
-        // The other hard gate: unrelated to the student's programme/faculty
-        // means it's simply not recommended, regardless of skill/interest/
-        // location overlap.
+        // Hard gate: unrelated to the student's programme/faculty is never recommended, regardless of other matches.
         if (! $this->matchesProgramme($student, $haystack)) {
             return [0.0, []];
         }
@@ -127,7 +113,6 @@ class RecommendationService
         return [$score, $reasons];
     }
 
-    /** Does this posting's category/title/description mention the student's own field of study? */
     private function matchesProgramme(Student $student, string $haystack): bool
     {
         $keywords = collect(preg_split('/[\s,\/&-]+/', (string) $student->programme, -1, PREG_SPLIT_NO_EMPTY))

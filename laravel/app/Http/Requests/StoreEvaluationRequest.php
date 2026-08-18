@@ -31,11 +31,7 @@ class StoreEvaluationRequest extends FormRequest
         ];
     }
 
-    /**
-     * A score is only meaningful against its own criterion's scale, and a
-     * submitted evaluation must cover every active criterion — neither of
-     * those can be expressed with a plain rule.
-     */
+    // Cross-field checks (score vs. its own criterion's scale, full coverage on submit) that plain rules can't express.
     public function withValidator(Validator $validator): void
     {
         $validator->after(function (Validator $validator) {

@@ -6,11 +6,7 @@ use App\Models\Internship;
 use App\Services\NotificationService;
 use App\Services\RecommendationService;
 
-/**
- * Module 3 — Observer side #1: when a posting goes live, matching students
- * are found via the recommendation engine and notified automatically,
- * instead of the employer or an admin having to trigger it manually.
- */
+/** Notifies matching students automatically when a posting goes live, instead of requiring a manual trigger. */
 class InternshipObserver
 {
     public function __construct(

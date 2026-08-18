@@ -1,5 +1,4 @@
-{{-- Single evaluation. Access is enforced by the API: students only see
-     approved ones, employers only their own, admins see everything. --}}
+{{-- Access is enforced by the API: students only see approved evaluations, employers only their own, admins see everything. --}}
 @extends('layouts.app')
 
 @section('title', 'Evaluation — InternHub')
@@ -27,8 +26,7 @@
     const res = await api('/api/evaluations/' + id);
     const e = res.data;
 
-    /* Draft and Rejected evaluations still belong to the employer — send them
-       to the form to keep working rather than showing a read-only summary. */
+    // Draft/Rejected evaluations still belong to the employer — send them to the form instead of a read-only summary.
     const editable = (e.status === 'Draft' || e.status === 'Rejected');
     if (editable && userRole() === 'Employer') {
       window.location.replace('/evaluations/create?id=' + e.evaluation_id);

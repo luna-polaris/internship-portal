@@ -23,14 +23,7 @@
 
 6. Press admin button beside MySQL in XAMPP 
 
-7. Navigate to SQL, Paste THIS
-CREATE DATABASE IF NOT EXISTS internship_portal
-    DEFAULT CHARACTER SET utf8mb4
-    DEFAULT COLLATE utf8mb4_unicode_ci;
-USE internship_portal;
-Then import
-
-8. At VScode, views > terminal > new terminal, type
+7. At VScode, views > terminal > new terminal, type
 cd laravel
 composer install
 php artisan key:generate

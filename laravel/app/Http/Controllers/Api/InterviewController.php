@@ -23,14 +23,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
-/**
- * Module 4 — Interview Scheduling & Notification.
- *
- * Visibility/authorization, in one place:
- *   Employer — schedule/manage interviews for their own company's applications
- *   Admin    — schedule/manage interviews for any application
- *   Student  — read-only, only their own interviews
- */
+// Employer schedules/manages interviews for their own company; Admin can for any; Student is read-only on their own.
 class InterviewController extends Controller
 {
     public function __construct(private NotificationService $notifications) {}
@@ -70,7 +63,6 @@ class InterviewController extends Controller
         return response()->json(['success' => true, 'data' => $interview]);
     }
 
-    /** Function 1 — Schedule Interview. */
     public function store(ScheduleInterviewRequest $request, Application $application): JsonResponse
     {
         $user = $request->user();
@@ -102,7 +94,6 @@ class InterviewController extends Controller
         return response()->json(['success' => true, 'message' => 'Interview scheduled.', 'data' => $interview], 201);
     }
 
-    /** Function 3 — Reschedule Interview. */
     public function reschedule(RescheduleInterviewRequest $request, Interview $interview): JsonResponse
     {
         $user = $request->user();
@@ -156,7 +147,6 @@ class InterviewController extends Controller
         return response()->json(['success' => true, 'message' => 'Reschedule request sent to the employer.', 'data' => $interview]);
     }
 
-    /** Employer/Admin confirms the student's proposed time. */
     public function approveReschedule(Request $request, Interview $interview): JsonResponse
     {
         $user = $request->user();
@@ -181,7 +171,7 @@ class InterviewController extends Controller
         return response()->json(['success' => true, 'message' => 'Reschedule request approved.', 'data' => $interview]);
     }
 
-    /** Employer/Admin declines the student's proposed time — the original schedule stands. */
+    // Declining leaves the original schedule unchanged.
     public function declineReschedule(DeclineRescheduleRequest $request, Interview $interview): JsonResponse
     {
         $user = $request->user();
@@ -208,7 +198,6 @@ class InterviewController extends Controller
         return response()->json(['success' => true, 'message' => 'Reschedule request declined.', 'data' => $interview]);
     }
 
-    /** Function 3 — Cancel Interview. */
     public function cancel(CancelInterviewRequest $request, Interview $interview): JsonResponse
     {
         $user = $request->user();
@@ -234,7 +223,6 @@ class InterviewController extends Controller
         return response()->json(['success' => true, 'message' => 'Interview cancelled.', 'data' => $interview]);
     }
 
-    /** Function 4 — Track Interview Status: mark an interview as completed. */
     public function complete(Request $request, Interview $interview): JsonResponse
     {
         $user = $request->user();
@@ -250,8 +238,7 @@ class InterviewController extends Controller
         $company = $interview->application->internship->company;
         $companyName = $company?->company_name ?? 'The employer';
         $studentEmail = $interview->application->student->user->email ?? null;
-        // The employer's own login email is always correct; company_email is an
-        // optional, user-entered field that can be blank, stale, or wrong.
+        // company_email is optional, user-entered, and can be stale — the employer's login email is more reliable.
         $contactEmail = $company?->employer?->user?->email ?? $company?->company_email;
 
         $this->notifications->interviewCompleted($interview->application->student->user_id, $interview->interview_id, $companyName);
@@ -282,7 +269,6 @@ class InterviewController extends Controller
         abort_unless($interview->hasPendingRescheduleRequest(), 422, 'There is no pending reschedule request on this interview.');
     }
 
-    /** Only the student who owns the application may request a reschedule. */
     private function authorizeStudentOwn($user, Interview $interview): void
     {
         abort_unless(
@@ -316,7 +302,6 @@ class InterviewController extends Controller
         }
     }
 
-    /** Employer must own the company behind the application; Admin can manage any. */
     private function authorizeManage($user, Application $application): void
     {
         if ($user->role === 'Admin') {

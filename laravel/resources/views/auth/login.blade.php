@@ -29,7 +29,6 @@
                 <button type="button" id="tab-admin" aria-selected="false" data-mode="admin">Admin</button>
             </div>
 
-            <!-- Student / Employer login: email + password -->
             <form id="user-login-form" novalidate>
                 <div class="field-group">
                     <label for="email">Email</label>
@@ -42,8 +41,7 @@
                 <button type="submit" class="btn-submit">Log In</button>
             </form>
 
-            <!-- Admin login: dedicated username + password, kept separate from the
-                 student/employer form and endpoint on purpose (see AuthController::adminLogin). -->
+            <!-- Kept as a separate form/endpoint on purpose — see AuthController::adminLogin. -->
             <form id="admin-login-form" class="role-fields" novalidate>
                 <div class="field-group">
                     <label for="username">Admin Username</label>
@@ -77,7 +75,6 @@
                 adminForm.style.display = isAdmin ? 'block' : 'none';
             });
         });
-        // Initial state: user form visible, admin form hidden.
         adminForm.style.display = 'none';
 
         const alertBox = document.getElementById('alert-box');

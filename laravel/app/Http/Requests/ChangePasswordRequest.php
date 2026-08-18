@@ -15,14 +15,9 @@ class ChangePasswordRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // The current password must be supplied and is re-checked against
-            // the stored hash in AuthController::changePassword().
             'old_password' => ['required', 'string'],
 
-            // Same strength policy as registration — otherwise this endpoint
-            // would be a way to downgrade an account to a weak password.
-            // `confirmed` pairs with new_password_confirmation so a typo can't
-            // silently lock the user out of their own account.
+            // Same strength policy as registration, so this can't be used to downgrade to a weak password.
             'new_password' => [
                 'required',
                 'string',

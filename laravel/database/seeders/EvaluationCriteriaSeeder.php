@@ -6,10 +6,7 @@ use App\Models\EvaluationCriterion;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
-/**
- * Default rubric — weights total 100.
- * Run with: php artisan db:seed --class=EvaluationCriteriaSeeder
- */
+/** Default rubric — weights across all criteria must total 100. */
 class EvaluationCriteriaSeeder extends Seeder
 {
     public function run(): void

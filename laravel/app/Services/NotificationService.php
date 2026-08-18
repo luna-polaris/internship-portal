@@ -6,10 +6,7 @@ use App\Models\User;
 use App\Models\UserNotification;
 use Illuminate\Support\Collection;
 
-/**
- * Single place that creates in-app alerts, so the wording and the link format
- * for each event stay consistent wherever they're triggered from.
- */
+/** Single place that creates in-app alerts, keeping wording and link formats consistent across the app. */
 class NotificationService
 {
     public function notify(int $userId, string $type, string $title, string $message, ?string $link = null): UserNotification
@@ -31,8 +28,6 @@ class NotificationService
             ->pluck('user_id')
             ->map(fn ($id) => $this->notify($id, $type, $title, $message, $link));
     }
-
-    // ---- Event helpers -------------------------------------------------
 
     public function evaluationSubmitted(int $evaluationId, string $studentName, string $companyName): void
     {
@@ -67,7 +62,6 @@ class NotificationService
         );
     }
 
-    /** Module 3 — Observer callback: a new posting matched this student's profile. */
     public function internshipMatched(int $studentUserId, int $internshipId, string $title, string $companyName): void
     {
         $this->notify(
@@ -78,8 +72,6 @@ class NotificationService
             "/internships/{$internshipId}"
         );
     }
-
-    // ---- Module 4 — Interview Scheduling & Notification ----------------
 
     public function interviewScheduled(int $studentUserId, int $interviewId, string $companyName, string $whenText): void
     {

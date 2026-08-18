@@ -85,13 +85,10 @@
 
         function formatDateTime(value) {
             if (!value) return '';
-            // The API returns the naive datetime the employer typed, serialized with a
-            // trailing Z — strip it so the browser doesn't reinterpret it as UTC and
-            // shift it into the viewer's local timezone.
+            // Strip the API's trailing Z so the browser doesn't reinterpret this naive datetime as UTC.
             return new Date(value.replace('Z', '')).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
         }
 
-        // --- Reschedule request ----------------------------------------------------
         const rrForm = document.getElementById('reschedule-request-form');
 
         function openRescheduleRequestForm(interviewId) {

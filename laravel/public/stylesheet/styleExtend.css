@@ -1,11 +1,9 @@
-/* ============================================
-   HOME PAGE EXTENSION
-   Sections appended below the hero, adapted from the appendMainPage/
-   layout (Tooplate "Level" template) and recoloured to InternHub's
-   dark / neon-chartreuse design language (see :root in stylePublic.css).
-   ============================================ */
+/* HOME PAGE EXTENSION
+   Sections appended below the hero, adapted from the Tooplate "Level"
+   template and recoloured to InternHub's dark/neon-chartreuse design
+   language (see :root in stylePublic.css). */
 
-/* --- NAV: LOGGED-IN USER WIDGET --- */
+/* Nav: logged-in user widget */
 #nav-user-widget {
     display: none;
     position: relative;
@@ -168,7 +166,7 @@
     max-width: 560px;
 }
 
-/* --- CTA BANNER (from tm-section-2) --- */
+/* CTA banner */
 .ext-cta {
     padding: 90px 36px;
     background: var(--graphite);
@@ -225,7 +223,7 @@
     color: var(--neon-chartreuse);
 }
 
-/* --- FEATURES (from the 3-article tm-section) --- */
+/* Features */
 .ext-features-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -256,7 +254,7 @@
     color: rgba(240, 240, 240, 0.55);
 }
 
-/* --- FEATURED COMPANIES (from tm-section-4 carousel + sidebar) --- */
+/* Featured companies */
 .ext-explore-layout {
     margin-top: 48px;
 }
@@ -317,7 +315,7 @@
     border: 1px dashed var(--steel);
 }
 
-/* --- GET IN TOUCH (from tm-section-6 map + form) --- */
+/* Get in touch */
 .ext-contact-layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -380,7 +378,7 @@
     color: var(--neon-chartreuse);
 }
 
-/* --- FOOTER (from the tooplate copyright bar) --- */
+/* Footer */
 .ext-footer {
     background: var(--seam);
     padding: 40px 36px;

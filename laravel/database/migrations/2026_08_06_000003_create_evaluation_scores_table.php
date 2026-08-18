@@ -20,7 +20,7 @@ return new class extends Migration
 
             $table->foreign('evaluation_id', 'evaluation_scores_evaluation_id_foreign')
                   ->references('evaluation_id')->on('evaluations')->cascadeOnDelete();
-            // Restrict: a criterion that has already been scored must be deactivated, not deleted.
+            // A scored criterion must be deactivated, not deleted.
             $table->foreign('criterion_id', 'evaluation_scores_criterion_id_foreign')
                   ->references('criterion_id')->on('evaluation_criteria')->restrictOnDelete();
         });

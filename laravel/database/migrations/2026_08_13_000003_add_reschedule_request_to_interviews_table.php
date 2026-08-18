@@ -4,11 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/**
- * A student-proposed new time sits here until the employer/admin approves
- * or declines it — the interview's real `scheduled_at` never changes until
- * approval, so a pending request can't silently become the actual schedule.
- */
+/** Holds a proposed new time until approved/declined; `scheduled_at` doesn't change until then. */
 return new class extends Migration
 {
     public function up(): void

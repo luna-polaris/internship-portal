@@ -1,4 +1,3 @@
-{{-- Function 1 — Performance Metrics and Criteria Definition. Admin-only rubric editor. --}}
 @extends('layouts.app')
 
 @section('title', 'Evaluation Criteria — InternHub')
@@ -90,8 +89,7 @@
     try {
       const res = await api('/api/criteria');
 
-      /* Weights only mean anything if the active ones sum to 100 — surface that
-         up front rather than letting it quietly skew every total score. */
+      // Weights only mean anything if the active ones sum to 100 — surface that rather than letting it silently skew every score.
       const total = res.meta.active_weight_total;
       healthEl.innerHTML = res.meta.weights_balanced
         ? '<p class="eval-note">Active weights total <strong>' + total + '%</strong>. The rubric is balanced.</p>'

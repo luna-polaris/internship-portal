@@ -1,4 +1,3 @@
-{{-- Function 2 — Feedback Submission. --}}
 @extends('layouts.app')
 
 @section('title', 'Evaluate An Intern — InternHub')
@@ -94,8 +93,9 @@
     if (!res2.data.length) {
       sel.insertAdjacentHTML('afterend',
         '<p class="eval-note" style="margin:.5rem 0 0;">No accepted interns yet. Students appear here once you accept their application.</p>');
-    }/* Resuming a draft or a returned evaluation: prefill everything so the
-       employer edits rather than retypes. */
+    }
+
+    // Resuming a draft or returned evaluation: prefill everything so the employer edits rather than retypes.
     const editId = new URLSearchParams(window.location.search).get('id');
     if (editId) {
       const existing = await api('/api/evaluations/' + editId);

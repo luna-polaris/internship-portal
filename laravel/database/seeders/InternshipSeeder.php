@@ -7,10 +7,7 @@ use App\Models\Employer;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
-/**
- * Demo data: one employer/company per homepage category, each with a
- * couple of Published postings, so /internships isn't empty out of the box.
- */
+/** Demo data: seeds one employer/company per homepage category with Published postings so /internships isn't empty by default. */
 class InternshipSeeder extends Seeder
 {
     public function run(): void
@@ -62,8 +59,7 @@ class InternshipSeeder extends Seeder
                 ],
             ],
 
-            // A second company per category, spread across more states so the
-            // location filters have something meaningful to work with.
+            // Second company per category, across more states, so location filters have data to work with.
             [
                 'category' => 'Finance',
                 'company' => ['company_name' => 'Aurelia Wealth Advisors', 'industry' => 'Finance', 'city' => 'Kuala Lumpur', 'state' => 'Federal Territory', 'description' => 'A wealth management firm advising high-net-worth individuals and family offices.'],

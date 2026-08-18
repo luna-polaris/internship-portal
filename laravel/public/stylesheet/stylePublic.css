@@ -1,9 +1,7 @@
-/* ============================================
-   COMPRESSION — CSS-Only Kinetic Portfolio
+/* COMPRESSION — CSS-Only Kinetic Portfolio
    TM-620
    https://templatemo.com/tm-620-compression
-   Design: TemplateMo
-   ============================================ */
+   Design: TemplateMo */
 
 *,
 *::before,
@@ -41,9 +39,8 @@ body {
     width: 100%;
 }
 
-/* Confines the fixed-feeling header/track/footer trio to exactly one
-   viewport, the way body used to on its own — freed up so real page
-   content can be appended and scrolled to below it. */
+/* Confines the header/track/footer trio to one viewport (as body used to
+   on its own), freeing body up so real page content can scroll below it. */
 .hero-stage {
     position: relative;
     width: 100%;
@@ -51,7 +48,7 @@ body {
     overflow: hidden;
 }
 
-/* --- THE TRACK --- */
+/* The track */
 main.track {
     display: flex;
     width: 100%;
@@ -60,7 +57,7 @@ main.track {
     gap: 0;
 }
 
-/* --- THE SLICES --- */
+/* The slices */
 article.panel {
     flex: 1;
     position: relative;
@@ -128,7 +125,7 @@ article.panel:last-child {
     white-space: nowrap;
 }
 
-/* --- THE SPINE --- */
+/* The spine */
 .spine {
     position: absolute;
     bottom: 60px;
@@ -150,7 +147,7 @@ article.panel:last-child {
     pointer-events: none;
 }
 
-/* --- THE DETAILS --- */
+/* The details */
 .details {
     position: absolute;
     bottom: 48px;
@@ -266,9 +263,7 @@ article.panel:last-child {
     transform: translateX(4px);
 }
 
-/* ===========================================
-   COMPRESSION ENGINE — HOVER STATES
-   =========================================== */
+/* Compression engine — hover states */
 
 main.track:hover > article.panel {
     flex: 1;
@@ -302,9 +297,7 @@ article.panel:hover .panel__index {
     opacity: 0.35 !important;
 }
 
-/* ===========================================
-   GLOBAL HEADER
-   =========================================== */
+/* Global header */
 .global-header {
     position: absolute;
     top: 0;
@@ -379,9 +372,7 @@ article.panel:hover .panel__index {
     opacity: 0.85;
 }
 
-/* ===========================================
-   CSS-ONLY MODALS (:target)
-   =========================================== */
+/* CSS-only modals (:target) */
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -600,7 +591,7 @@ article.panel:hover .panel__index {
     border-color: var(--neon-chartreuse);
 }
 
-/* --- BOTTOM STRIP --- */
+/* Bottom strip */
 .global-footer {
     position: absolute;
     bottom: 0;
@@ -652,7 +643,7 @@ article.panel:hover .panel__index {
     background: rgba(240, 240, 240, 0.3);
 }
 
-/* --- ENTRANCE ANIMATION --- */
+/* Entrance animation */
 @keyframes sliceIn {
     0% { transform: scaleX(0); opacity: 0; }
     100% { transform: scaleX(1); opacity: 1; }
@@ -689,7 +680,7 @@ article.panel:nth-child(3) .spine { animation-delay: 0.8s; }
 article.panel:nth-child(4) .spine { animation-delay: 0.9s; }
 article.panel:nth-child(5) .spine { animation-delay: 1.0s; }
 
-/* --- RESPONSIVE --- */
+/* Responsive */
 @media (max-width: 900px) {
     .hero-stage {
         height: auto;

@@ -1,11 +1,4 @@
-{{--
-  Shared shell for the Feedback & Performance Evaluation pages.
-  Reuses the public stylesheets and the header markup from home.blade.php so
-  these pages sit inside the same visual system as the rest of the portal.
-
-  Pages using it provide:  @section('title')  @section('page_title')
-                           @section('page_subtitle')  @section('content')
---}}
+{{-- Shared shell for the Feedback & Performance Evaluation pages. Pages provide @section('title'), @section('page_title'), @section('page_subtitle'), @section('content'). --}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,7 +38,6 @@
 
                 <a href="{{ url('/admin/dashboard') }}" id="nav-admin-dashboard-link" style="display:none;">Admin Dashboard</a>
 
-                {{-- Module 3.2 — shown only to the role that can act on each page --}}
                 <a href="{{ url('/evaluations/create') }}" id="nav-eval-write-link" style="display:none;">Evaluate An Intern</a>
                 <a href="{{ url('/admin/evaluations') }}" id="nav-eval-review-link" style="display:none;">Review Queue</a>
                 <a href="{{ url('/admin/criteria') }}" id="nav-eval-criteria-link" style="display:none;">Evaluation Criteria</a>
@@ -82,7 +74,7 @@
 <script>
 document.getElementById('eval-year').textContent = new Date().getFullYear();
 
-/* Token key matches the one login.blade.php writes. */
+// Token key matches the one login.blade.php writes.
 window.apiToken = () => localStorage.getItem('internhub_token') || '';
 window.userRole = () => localStorage.getItem('internhub_role') || '';
 
@@ -107,8 +99,7 @@ window.flash = (message, ok = true) => {
   el.className = 'eval-flash ' + (ok ? 'is-ok' : 'is-bad');
 };
 
-/* Send anyone without the right role back to the homepage rather than
-   showing them buttons the API will refuse. Pages opt in via data-role. */
+// Sends anyone without the right role back to the homepage rather than showing them buttons the API will refuse.
 window.requireRole = (allowed) => {
   const role = window.userRole();
   if (!role) { window.location.href = '{{ url('/login') }}'; return false; }
@@ -121,7 +112,6 @@ window.requireRole = (allowed) => {
   return true;
 };
 
-/* Nav: swap Login/Register for the signed-in user, reveal role-specific links. */
 (function () {
   const token = localStorage.getItem('internhub_token');
   if (!token) return;

@@ -27,10 +27,7 @@
 
             <div id="alert-box" class="alert"></div>
 
-            <!-- Shown in place of the form once registration succeeds. The account
-                 is created with status=Pending and cannot log in until the emailed
-                 link is clicked, so this needs to be unmissable rather than a
-                 message that flashes past on the way to the login page. -->
+            <!-- Account is status=Pending until the emailed link is clicked, so this must be unmissable, not a flash message. -->
             <div id="register-success" class="verify-panel" role="status" aria-live="polite">
                 <div class="verify-panel__icon" aria-hidden="true">&#10003;</div>
                 <h2 class="verify-panel__title">Account created</h2>
@@ -97,7 +94,6 @@
                     </div>
                 </fieldset>
 
-                <!-- Student-only fields -->
                 <fieldset class="role-fields active" data-role-fields="Student" id="fields-student">
                     <legend>Academic Details</legend>
 
@@ -135,7 +131,6 @@
                     </div>
                 </fieldset>
 
-                <!-- Employer-only fields -->
                 <fieldset class="role-fields" data-role-fields="Employer" id="fields-employer">
                     <legend>Job Details</legend>
 
@@ -231,7 +226,6 @@
     </main>
 
     <script>
-        // --- Role tab switching ---
         const roleInput = document.getElementById('role');
         const tabs = document.querySelectorAll('.role-switch button');
 
@@ -253,14 +247,13 @@
         });
         document.getElementById('matric_no').required = true;
 
-        // --- Google Maps: Places Autocomplete + marker, fills city/state/postcode ---
         let map, marker;
 
         function initAutocomplete() {
             const mapDiv = document.getElementById('map-picker');
             mapDiv.textContent = '';
 
-            const center = { lat: 3.139, lng: 101.6869 }; // Kuala Lumpur, adjust as needed
+            const center = { lat: 3.139, lng: 101.6869 }; // Kuala Lumpur placeholder, adjust as needed
             map = new google.maps.Map(mapDiv, { center, zoom: 11 });
             marker = new google.maps.Marker({ map, position: center });
 
@@ -311,10 +304,7 @@
             })();
         @endif
 
-        // --- Live password requirement checklist ---
-        // These tests mirror Laravel's Password rule (Password::min(12)
-        // ->mixedCase()->numbers()->symbols()) so the ticks can never
-        // disagree with what the server accepts on submit.
+        // Mirrors Laravel's Password rule (min 12, mixedCase, numbers, symbols) so the ticks never disagree with the server.
         const passwordRules = {
             length: (value) => value.length >= 12,
             upper: (value) => /\p{Lu}/u.test(value),
@@ -334,7 +324,6 @@
             });
         });
 
-        // --- Form submission ---
         const form = document.getElementById('register-form');
         const alertBox = document.getElementById('alert-box');
         const submitBtn = document.getElementById('submit-btn');
@@ -344,9 +333,7 @@
             alertBox.className = 'alert show alert-' + type;
         }
 
-        // Give every field its own error slot, sitting directly above the input,
-        // so validation messages appear next to the field they belong to rather
-        // than all bunched at the top of the form.
+        // Each field gets its own error slot above the input, rather than errors bunched at the top of the form.
         form.querySelectorAll('input:not([type="hidden"]), select, textarea').forEach((control) => {
             if (!control.name) return;
             const slot = document.createElement('p');
@@ -365,11 +352,7 @@
             });
         }
 
-        /**
-         * errors: { field_name: ["message", ...], ... } — Laravel's 422 shape.
-         * Anything without a matching field on this form falls back to the
-         * top alert so a message can never silently disappear.
-         */
+        // errors: { field_name: ["message", ...], ... } — Laravel's 422 shape. Fields with no matching slot fall back to the top alert.
         function showFieldErrors(errors) {
             let firstInvalid = null;
             const orphaned = [];
@@ -384,9 +367,7 @@
                     return;
                 }
 
-                // A field can fail several rules at once (e.g. a password that is
-                // too short AND missing a symbol) — show all of them so the user
-                // fixes everything in one pass instead of one error per attempt.
+                // A field can fail several rules at once, so show all of them rather than one error per attempt.
                 slot.textContent = '';
                 list.forEach((message, index) => {
                     if (index > 0) slot.appendChild(document.createElement('br'));
@@ -410,7 +391,6 @@
             }
         }
 
-        // Clear a field's error as soon as the user starts correcting it.
         form.addEventListener('input', (event) => {
             const control = event.target;
             if (!control.name || !control.classList.contains('is-invalid')) return;
@@ -428,8 +408,7 @@
             alertBox.className = 'alert';
             clearFieldErrors();
 
-            // Quick local check so the user doesn't wait on a round-trip for a
-            // typo; the server enforces this too via the `confirmed` rule.
+            // Quick local check to avoid a round-trip for a typo; the server also enforces this via the `confirmed` rule.
             if (document.getElementById('password').value !== document.getElementById('password_confirmation').value) {
                 showFieldErrors({ password_confirmation: ['Password confirmation does not match.'] });
                 return;
@@ -465,11 +444,7 @@
                     return;
                 }
 
-                // Swap the form out for the "verify your email" panel and stay
-                // put. Auto-redirecting to /login here would hide the one
-                // instruction the user has to act on, and they'd just be met
-                // with "Please verify your email" on their first login attempt.
-                // Server sends the masked form; never re-display the raw address.
+                // Show the "verify your email" panel instead of redirecting to /login, so the user sees the instruction they must act on.
                 document.getElementById('verify-email-address').textContent = data.masked_email;
                 document.getElementById('register-heading').textContent = 'Check Your Email';
                 document.getElementById('register-intro').style.display = 'none';

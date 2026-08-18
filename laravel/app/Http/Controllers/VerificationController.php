@@ -6,12 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 
-/**
- * Browser-facing counterpart to Api\AuthController::verifyEmail(). The link
- * mailed to a new user must land somewhere a browser can render (a redirect
- * with a flash message), not raw JSON — the API endpoint stays JSON-only
- * for programmatic/API clients.
- */
+// Browser-facing counterpart to Api\AuthController::verifyEmail(); redirects with a flash message since the emailed link is opened in a browser, not an API client.
 class VerificationController extends Controller
 {
     public function show(Request $request): RedirectResponse

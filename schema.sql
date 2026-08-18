@@ -1,26 +1,21 @@
--- ============================================================
 -- InternHub — Industrial Internship Matching Portal
 -- Database structure snapshot (no data)
--- ============================================================
+--
 -- REFERENCE ONLY. The authoritative schema is the migration set in
 -- laravel/database/migrations/ — the normal setup path is:
 --
 --     php artisan migrate
 --     php artisan db:seed
 --
--- which builds every table below AND populates demo data (admin account,
--- 10 companies, 25 internship postings, evaluation rubric).
--- See laravel/README.md for the full setup guide.
---
--- Use this file only if you want to inspect the structure, or create the
--- tables by hand (e.g. importing through phpMyAdmin) instead of migrating.
--- Importing this gives you empty tables with no seed data.
+-- which builds every table below AND populates demo data. Use this file
+-- only to inspect the structure or create tables by hand (e.g. via
+-- phpMyAdmin) instead of migrating — importing it gives empty tables
+-- with no seed data.
 --
 -- NOTE: keep this file UTF-8. Regenerating it with PowerShell's `>`
 -- redirection produces UTF-16 and makes it unimportable; use:
 --   mysqldump -u root --no-data --skip-comments internship_portal ^
 --     | Out-File -Encoding utf8 schema.sql
--- ============================================================
 
 CREATE DATABASE IF NOT EXISTS internship_portal
     DEFAULT CHARACTER SET utf8mb4

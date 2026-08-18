@@ -62,13 +62,7 @@ class StudentController extends Controller
         return response()->json(['success' => true, 'data' => $students]);
     }
 
-    /**
-     * Module 3 — reads the recommendation engine's stored output for the
-     * authenticated student (never another student's — student_id always
-     * comes from the token, never from client input). Computed lazily on
-     * first access; every later refresh comes from StudentObserver /
-     * InternshipObserver instead of running here.
-     */
+    // Computed lazily on first access; later refreshes come from StudentObserver/InternshipObserver, not here.
     public function recommended(Request $request)
     {
         $student = Student::where('user_id', $request->user()->user_id)->first();

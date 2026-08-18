@@ -60,12 +60,7 @@ class Internship extends Model
         $this->attributes['skills_required'] = ListSanitizer::toJson($value);
     }
 
-    /**
-     * What the public should ever see: live postings that haven't passed
-     * their own deadline yet (a Published-but-expired posting is still
-     * technically open until the employer closes it, but shouldn't
-     * clutter search results).
-     */
+    /** Published postings only, excluding ones past their deadline (still technically open, but shouldn't clutter search). */
     public function scopeVisible($query)
     {
         return $query->where('status', 'Published')

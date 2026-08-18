@@ -9,10 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-/**
- * Function 3 — Performance Dashboard and Analytics.
- * One endpoint, three shapes: each role gets the numbers it can actually act on.
- */
+// One endpoint, three shapes: each role gets the numbers it can actually act on.
 class PerformanceDashboardController extends Controller
 {
     public function index(Request $request): JsonResponse

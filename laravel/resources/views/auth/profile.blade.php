@@ -24,7 +24,6 @@
 
             <div id="page-alert" class="alert"></div>
 
-            <!-- Profile picture -->
             <fieldset>
                 <legend>Profile Picture</legend>
                 <div style="display:flex; align-items:center; gap:24px; margin-bottom:1rem;">
@@ -37,7 +36,6 @@
                 <button type="button" class="btn-submit" id="avatar-submit">Upload Picture</button>
             </fieldset>
 
-            <!-- Resume (Students only) -->
             <fieldset id="resume-section" style="display:none;">
                 <legend>Resume</legend>
                 <p id="resume-current" class="field-hint" style="margin-bottom:0.75rem;"></p>
@@ -46,7 +44,6 @@
                 <button type="button" class="btn-submit" id="resume-submit" style="margin-top:1rem;">Upload Resume</button>
             </fieldset>
 
-            <!-- Recommendation Preferences (Students only) -->
             <form id="student-profile-form" novalidate style="display:none;">
                 <fieldset>
                     <legend>Academic &amp; Recommendation Preferences</legend>
@@ -90,7 +87,6 @@
                 <button type="submit" class="btn-submit">Save Preferences</button>
             </form>
 
-            <!-- Full Name -->
             <form id="fullname-form" novalidate>
                 <fieldset>
                     <legend>Full Name</legend>
@@ -102,7 +98,6 @@
                 <button type="submit" class="btn-submit">Save Full Name</button>
             </form>
 
-            <!-- Email -->
             <form id="email-form" novalidate>
                 <fieldset>
                     <legend>Email Address</legend>
@@ -119,7 +114,6 @@
                 <button type="submit" class="btn-submit">Save Email</button>
             </form>
 
-            <!-- Password -->
             <form id="password-form" novalidate>
                 <fieldset>
                     <legend>Change Password</legend>

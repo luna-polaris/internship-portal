@@ -1,4 +1,3 @@
-{{-- Function 5 — Notification and Alerts. --}}
 @extends('layouts.app')
 
 @section('title', 'Alerts — InternHub')

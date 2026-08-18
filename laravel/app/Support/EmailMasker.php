@@ -7,15 +7,9 @@ class EmailMasker
     private const MASK_CHAR = '•';
 
     /**
-     * Partially hide an email address for display.
-     *
-     *   jane.doe@example.com  ->  j••••••e@example.com
-     *
-     * The first and last characters of the local part are kept so the owner
-     * can still recognise the address (and spot a typo), and the domain is
-     * left intact so they can tell which provider to check. Anything with a
-     * local part of two characters or fewer is masked completely, since
-     * showing first + last there would reveal the whole thing.
+     * Masks an email for display: jane.doe@example.com -> j••••••e@example.com.
+     * Keeps the local part's first/last chars so the owner still recognises it;
+     * local parts of 2 chars or fewer are masked entirely.
      */
     public static function mask(?string $email): string
     {

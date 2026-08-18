@@ -7,7 +7,6 @@ use App\Models\UserNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-/** Function 5 — Notification and Alerts (in-app inbox + unread badge). */
 class NotificationController extends Controller
 {
     public function index(Request $request): JsonResponse

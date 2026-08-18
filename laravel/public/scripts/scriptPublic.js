@@ -2,15 +2,11 @@
    COMPRESSION — TM-620
    https://templatemo.com/tm-620-compression
    Design: TemplateMo
-   
-   Scroll reveal with IntersectionObserver
-   + 3-second setTimeout fallback for iframe preview contexts
 */
 
 (function () {
     'use strict';
 
-    // Scroll reveal for mobile stacked layout
     const panels = document.querySelectorAll('article.panel');
 
     function revealPanel(el) {
@@ -18,7 +14,7 @@
         el.style.transform = 'translateY(0)';
     }
 
-    // Only apply scroll reveal in mobile (stacked) layout
+    // Mobile (stacked) layout only
     function initScrollReveal() {
         if (window.innerWidth > 900) return;
 
@@ -51,14 +47,12 @@
         }, 3000);
     }
 
-    // Close modal on Escape key
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape' && window.location.hash) {
             window.location.hash = '';
         }
     });
 
-    // Close modal when clicking overlay background
     document.querySelectorAll('.modal-overlay').forEach(function (overlay) {
         overlay.addEventListener('click', function (e) {
             if (e.target === overlay) {
@@ -67,6 +61,5 @@
         });
     });
 
-    // Init
     document.addEventListener('DOMContentLoaded', initScrollReveal);
 })();

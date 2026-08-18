@@ -12,12 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
-/**
- * Generic "my account" controller — dispatches to the correct role-specific
- * model so callers don't need to know which one to use. Role-specific
- * fields (matric_no, company details, ...) still live in the dedicated
- * StudentController/EmployerController/CompanyController.
- */
+// Generic "my account" controller that dispatches to the correct role-specific model; role-specific fields still live in StudentController/EmployerController/CompanyController.
 class ProfileController extends Controller
 {
     public function show(Request $request)

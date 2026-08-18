@@ -64,11 +64,7 @@ class Evaluation extends Model
         return $query->where('status', self::STATUS_APPROVED);
     }
 
-    /**
-     * Weighted percentage out of 100:
-     *   sum( (score / max_score) * weight )  over every scored criterion.
-     * Stored on the row so dashboard queries stay cheap.
-     */
+    /** Weighted score: sum((score / max_score) * weight) over every scored criterion; cached on the row for cheap dashboard reads. */
     public function recalculateTotalScore(): float
     {
         $total = 0.0;

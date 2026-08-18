@@ -8,10 +8,7 @@ use Illuminate\Validation\Rules\Password;
 
 class RegisterRequest extends FormRequest
 {
-    /**
-     * Every rule here is enforced server-side — the browser-side checks in
-     * register.blade.php are only for faster feedback and can be bypassed.
-     */
+    // Browser-side checks in register.blade.php are only for feedback; every rule here is enforced server-side too.
     public function authorize(): bool
     {
         return true;
@@ -28,7 +25,6 @@ class RegisterRequest extends FormRequest
 
             'email' => ['required', 'email', 'max:100', 'unique:users,email'],
 
-            // >= 12 characters containing upper case, lower case, a digit and a symbol.
             // `confirmed` pairs this with the password_confirmation field.
             'password' => [
                 'required',
@@ -62,10 +58,6 @@ class RegisterRequest extends FormRequest
         ];
     }
 
-    /**
-     * Plain-English messages — these are what the user actually reads above
-     * the offending field, so they state the rule rather than restating it.
-     */
     public function messages(): array
     {
         return [

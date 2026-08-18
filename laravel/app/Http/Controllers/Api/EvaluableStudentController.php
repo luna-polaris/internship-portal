@@ -7,14 +7,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-/**
- * Students this employer is allowed to evaluate — i.e. anyone accepted onto
- * one of their own company's internships. Backs the intern dropdown on the
- * evaluation form; the same rule is enforced again in EvaluationController.
- */
+// Students accepted onto one of this employer's internships; same rule re-enforced in EvaluationController.
 class EvaluableStudentController extends Controller
 {
-    /** Application statuses that mean the student actually joined. */
     private const ACCEPTED_STATUSES = ['Accepted'];
 
     public function index(Request $request): JsonResponse

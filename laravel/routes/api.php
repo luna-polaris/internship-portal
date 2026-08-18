@@ -19,7 +19,6 @@ use App\Http\Controllers\Api\StudentApplicationController;
 use App\Http\Controllers\Api\StudentController;
 use Illuminate\Support\Facades\Route;
 
-// Public
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/admin/login', [AuthController::class, 'adminLogin']);
@@ -34,7 +33,6 @@ Route::get('/companies/{company}', [CompanyController::class, 'show']);
 Route::get('/internships', [PublicInternshipController::class, 'index']);
 Route::get('/internships/{internship}', [PublicInternshipController::class, 'show']);
 
-// Authenticated (any role)
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/password/change', [AuthController::class, 'changePassword']);
@@ -44,7 +42,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/me/email', [ProfileController::class, 'updateEmail']);
     Route::post('/me/avatar', [ProfileController::class, 'uploadAvatar']);
 
-    // Student-only
     Route::middleware('role:Student')->group(function () {
         Route::get('/student/profile', [StudentController::class, 'show']);
         Route::put('/student/profile', [StudentController::class, 'update']);
@@ -60,7 +57,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/student/bookmarks', [BookmarkController::class, 'index']);
     });
 
-    // Employer-only
     Route::middleware('role:Employer')->group(function () {
         Route::get('/employer/profile', [EmployerController::class, 'show']);
         Route::put('/employer/profile', [EmployerController::class, 'update']);
@@ -82,7 +78,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('/employer/applications/{application}/reject', [EmployerApplicationController::class, 'reject']);
     });
 
-    // Admin-only
     Route::middleware('role:Admin')->prefix('admin')->group(function () {
         Route::get('/stats', [AdminController::class, 'dashboardStats']);
         Route::get('/users', [AdminController::class, 'listUsers']);
@@ -97,14 +92,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/companies/{company}', [CompanyController::class, 'destroy']);
     });
 
-    /*
-|--------------------------------------------------------------------------
-| Module 3.2 — Feedback & Performance Evaluation
-|--------------------------------------------------------------------------
-*/
 Route::middleware('auth:sanctum')->group(function () {
 
-    // --- Criteria definition (read: any signed-in user, write: Admin only) ---
+    // Criteria: readable by any signed-in user; write is Admin-only (enforced in controller).
     Route::get('evaluable-students', [EvaluableStudentController::class, 'index']);
     Route::get('criteria', [EvaluationCriterionController::class, 'index']);
     Route::get('criteria/{criterion}', [EvaluationCriterionController::class, 'show']);
@@ -112,33 +102,22 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('criteria/{criterion}', [EvaluationCriterionController::class, 'update']);
     Route::delete('criteria/{criterion}', [EvaluationCriterionController::class, 'destroy']);
 
-    // --- Feedback submission + review ---
     Route::get('evaluations', [EvaluationController::class, 'index']);
     Route::post('evaluations', [EvaluationController::class, 'store']);   // save draft or submit
     Route::get('evaluations/{evaluation}', [EvaluationController::class, 'show']);
     Route::delete('evaluations/{evaluation}', [EvaluationController::class, 'destroy']);
     Route::post('evaluations/{evaluation}/review', [EvaluationController::class, 'review']);
 
-    // --- Dashboard and analytics (role-aware payload) ---
+    // Response payload varies by role.
     Route::get('performance/dashboard', [PerformanceDashboardController::class, 'index']);
 
-    // --- Notifications and alerts ---
     Route::get('notifications', [NotificationController::class, 'index']);
     Route::patch('notifications/read-all', [NotificationController::class, 'markAllAsRead']);
     Route::patch('notifications/{notification}/read', [NotificationController::class, 'markAsRead']);
     Route::delete('notifications/{notification}', [NotificationController::class, 'destroy']);
 
-    /*
-    |----------------------------------------------------------------------
-    | Module 4 — Interview Scheduling & Notification
-    |
-    | Read (index/show): any signed-in role, scoped in the controller —
-    | Student sees only their own, Employer only their company's, Admin all.
-    | Write (schedule/reschedule/cancel/complete): Employer (own company) or
-    | Admin, also enforced in the controller since it needs the ownership
-    | chain through Application -> Internship -> Company -> Employer.
-    |----------------------------------------------------------------------
-    */
+    // Authorization is enforced in the controller: reads are scoped per role,
+    // writes require Employer (own company) or Admin via the Application -> Internship -> Company -> Employer chain.
     Route::get('interviews', [InterviewController::class, 'index']);
     Route::get('interviews/{interview}', [InterviewController::class, 'show']);
     Route::post('applications/{application}/interviews', [InterviewController::class, 'store']);

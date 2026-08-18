@@ -9,10 +9,7 @@ use App\Services\NotificationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-/**
- * Function 1 — Performance Metrics and Criteria Definition.
- * Admin-only CRUD over the rubric every evaluation is scored against.
- */
+// Admin-only CRUD over the rubric every evaluation is scored against.
 class EvaluationCriterionController extends Controller
 {
     public function __construct(private NotificationService $notifications) {}
@@ -69,10 +66,7 @@ class EvaluationCriterionController extends Controller
         ]);
     }
 
-    /**
-     * Criteria already used in an evaluation are deactivated instead of deleted —
-     * removing one would silently change historical totals.
-     */
+    // Criteria already used in an evaluation are deactivated instead of deleted, to avoid silently changing historical totals.
     public function destroy(Request $request, EvaluationCriterion $criterion): JsonResponse
     {
         abort_unless($request->user()->role === 'Admin', 403);

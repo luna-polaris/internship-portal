@@ -11,9 +11,6 @@ use Illuminate\Http\Request;
 
 class InternshipController extends Controller
 {
-    /**
-     * Resolve the internship postings owned by the authenticated employer's company.
-     */
     private function ownedCompany(Request $request)
     {
         $employer = Employer::where('user_id', $request->user()->user_id)->first();

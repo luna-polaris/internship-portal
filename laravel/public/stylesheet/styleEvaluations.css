@@ -1,9 +1,7 @@
-/* ============================================================
-   Module 3.2 — Feedback & Performance Evaluation
-   Dark theme matched to stylePublic.css. Only --neon-chartreuse
-   and --off-white are borrowed; everything else is defined here
-   with fallbacks so this file is safe to drop in on its own.
-   ============================================================ */
+/* Module 3.2 — Feedback & Performance Evaluation
+   Dark theme matched to stylePublic.css. Only --neon-chartreuse and
+   --off-white are borrowed; everything else is defined here with
+   fallbacks so this file is safe to drop in on its own. */
 
 .eval-body {
     --eval-ink:        var(--off-white, #f2f2f0);
@@ -28,7 +26,7 @@
     padding: 3.5rem 1.5rem 4rem;
 }
 
-/* --- Page header --- */
+/* Page header */
 .eval-pagehead { margin-bottom: 2rem; }
 
 .eval-title {
@@ -46,7 +44,7 @@
     margin: 0;
 }
 
-/* --- Cards --- */
+/* Cards */
 .eval-card {
     background: var(--eval-surface);
     border: 1px solid var(--eval-line);
@@ -69,7 +67,7 @@
     margin-bottom: 1.25rem;
 }
 
-/* --- Stat blocks --- */
+/* Stat blocks */
 .eval-stat-label {
     color: var(--eval-muted);
     font-size: .7rem;
@@ -85,7 +83,7 @@
     color: var(--eval-accent);
 }
 
-/* --- Tables --- */
+/* Tables */
 .eval-card table { width: 100%; border-collapse: collapse; }
 
 .eval-card th {
@@ -107,7 +105,7 @@
 
 .eval-card tr:last-child td { border-bottom: none; }
 
-/* --- Score bar --- */
+/* Score bar */
 .eval-bar {
     background: var(--eval-surface-2);
     height: 6px;
@@ -117,7 +115,7 @@
 
 .eval-bar span { display: block; height: 100%; background: var(--eval-accent); }
 
-/* --- Status pills --- */
+/* Status pills */
 .eval-pill {
     display: inline-block;
     padding: .2rem .6rem;
@@ -137,7 +135,7 @@
 .eval-pill-Published { color: var(--eval-accent); }
 .eval-pill-Closed    { color: var(--eval-bad); }
 
-/* --- Forms --- */
+/* Forms */
 .eval-main label {
     display: block;
     font-size: .7rem;
@@ -182,7 +180,7 @@
 .eval-btn:disabled { opacity: .45; cursor: not-allowed; }
 .eval-btn:hover:not(:disabled) { filter: brightness(1.12); }
 
-/* --- Criterion block on the scoring form --- */
+/* Criterion block (scoring form) */
 .eval-criterion {
     border: 1px solid var(--eval-line);
     padding: 1rem;
@@ -224,7 +222,7 @@
 .eval-criterion__inputs input[type="text"] { flex: 1; min-width: 12rem; }
 .eval-criterion__scale { color: var(--eval-muted); font-size: .8rem; white-space: nowrap; }
 
-/* --- Feedback states --- */
+/* Feedback states */
 .eval-flash { display: none; padding: .85rem 1rem; margin-bottom: 1.25rem; border-left: 3px solid; }
 .eval-flash.is-ok  { display: block; color: var(--eval-accent); background: rgba(216,255,62,.07); }
 .eval-flash.is-bad { display: block; color: var(--eval-bad);    background: rgba(255,107,94,.08); }
@@ -236,7 +234,7 @@
 .eval-note { color: var(--eval-muted); font-size: .85rem; line-height: 1.6; }
 .eval-note strong { color: var(--eval-ink); }
 
-/* --- Nav badge --- */
+/* Nav badge */
 .eval-badge {
     display: inline-block;
     min-width: 1.35em;

@@ -1,19 +1,16 @@
 /**
  * Adds a Show/Hide button to every password field on the page.
  *
- * Self-contained on purpose: it finds the fields itself rather than needing
- * markup changes, so any password input added later is picked up for free.
- *
- * Load this AFTER a page's own inline script. The register page inserts its
- * validation-error slots as siblings of each input; if this ran first, those
- * slots would land inside the wrapper created here and throw off the button's
- * vertical centering.
+ * Must load AFTER a page's own inline script: the register page inserts
+ * validation-error slots as siblings of each input, and if this ran first,
+ * those slots would land inside the wrapper created here, throwing off the
+ * button's vertical centering.
  */
 (function () {
     'use strict';
 
     document.querySelectorAll('input[type="password"]').forEach(function (input) {
-        // Guard against double-enhancement if this script is ever included twice.
+        // Guard against double-enhancement.
         if (input.dataset.pwToggle) {
             return;
         }
@@ -25,7 +22,7 @@
         wrap.appendChild(input);
 
         var button = document.createElement('button');
-        // Explicitly type="button" — without it this would submit the form.
+        // type="button" — without it, clicking would submit the form.
         button.type = 'button';
         button.className = 'pw-toggle';
         button.textContent = 'Show';
@@ -41,11 +38,10 @@
             button.setAttribute('aria-label', isRevealed ? 'Show password' : 'Hide password');
             button.setAttribute('aria-pressed', String(!isRevealed));
 
-            // Put the caret back so the user can keep typing where they left off.
             input.focus();
         });
 
-        // Never leave a password on screen after the form is sent.
+        // Never leave a password revealed after the form is sent.
         if (input.form) {
             input.form.addEventListener('submit', function () {
                 input.type = 'password';

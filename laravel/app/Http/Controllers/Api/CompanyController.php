@@ -11,10 +11,7 @@ use Illuminate\Http\Request;
 
 class CompanyController extends Controller
 {
-    /**
-     * An employer creates their company profile. `companies.employer_id`
-     * is UNIQUE, so each employer can only ever have one company.
-     */
+    // companies.employer_id is UNIQUE, so each employer can only ever have one company.
     public function store(StoreCompanyRequest $request)
     {
         $employer = Employer::where('user_id', $request->user()->user_id)->first();
@@ -82,9 +79,7 @@ class CompanyController extends Controller
         return response()->json(['success' => true, 'data' => Company::search($keyword)->get()]);
     }
 
-    /**
-     * Admin-only: remove a company (does not delete the employer/user).
-     */
+    // Does not delete the underlying employer/user.
     public function destroy(Company $company)
     {
         $company->delete();

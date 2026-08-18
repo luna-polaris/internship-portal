@@ -73,10 +73,7 @@ class User extends Authenticatable
         );
     }
 
-    /**
-     * Shared by the JSON verify-email endpoint and the browser-facing
-     * verification link so both use the exact same activation rule.
-     */
+    /** Shared by the JSON and browser-facing verify-email endpoints so both use the same activation rule. */
     public static function activateByToken(string $token): ?self
     {
         $user = static::where('token', $token)->where('token_expires_at', '>=', now())->first();

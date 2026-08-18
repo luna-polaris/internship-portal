@@ -17,8 +17,7 @@ class ResetPasswordRequest extends FormRequest
         return [
             'token' => ['required', 'string'],
 
-            // Held to the same strength policy as registration, so a reset
-            // can't be used to set a password the sign-up form would reject.
+            // Same strength policy as registration, so a reset can't set a weaker password.
             'password' => [
                 'required',
                 'string',

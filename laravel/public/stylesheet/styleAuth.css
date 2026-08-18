@@ -1,5 +1,4 @@
-/* Shared styling for register/login pages — reuses the design tokens
-   defined in stylePublic.css (:root vars, Anton/Space Mono fonts). */
+/* Shared styling for register/login pages — reuses design tokens from stylePublic.css. */
 
 *,
 *::before,
@@ -16,9 +15,8 @@ html {
     overflow-y: auto;
 }
 
-/* stylePublic.css sets body { overflow:hidden; height:100vh } for the
-   single-viewport homepage — override both here so the (taller,
-   scrollable) auth pages aren't clipped. */
+/* Override stylePublic.css's overflow:hidden/height:100vh (for the single-viewport
+   homepage) so the taller, scrollable auth pages aren't clipped. */
 body.auth-body {
     background: var(--carbon);
     color: var(--off-white);
@@ -211,8 +209,7 @@ fieldset legend {
     margin-top: 0.35rem;
 }
 
-/* Show/Hide control injected next to every password field
-   by public/scripts/passwordToggle.js */
+/* Show/Hide control injected by public/scripts/passwordToggle.js */
 .pw-wrap {
     position: relative;
     display: block;
@@ -252,7 +249,7 @@ fieldset legend {
     color: var(--neon-chartreuse);
 }
 
-/* Post-registration "verify your email" confirmation. */
+/* Post-registration verify-email panel */
 .verify-panel {
     display: none;
     text-align: center;
@@ -340,7 +337,7 @@ fieldset legend {
     font-weight: 700;
 }
 
-/* Live password requirement checklist — each row ticks as the rule is met. */
+/* Password requirement checklist */
 .pw-checklist {
     list-style: none;
     margin-top: 0.5rem;
@@ -359,8 +356,7 @@ fieldset legend {
     transition: color 0.2s ease;
 }
 
-/* Fixed-width marker box keeps the label text from shifting when the
-   glyph swaps from the unmet dot to the tick. */
+/* Fixed width keeps label text from shifting when the glyph swaps. */
 .pw-checklist li::before {
     content: '\25CB';
     display: inline-block;
@@ -381,7 +377,7 @@ fieldset legend {
     font-weight: 700;
 }
 
-/* Validation message, rendered directly above the field it belongs to. */
+/* Field validation message */
 .field-error {
     display: none;
     font-family: var(--font-mono);

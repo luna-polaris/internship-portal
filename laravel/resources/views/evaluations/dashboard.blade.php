@@ -1,4 +1,3 @@
-{{-- Function 3 — Performance Dashboard and Analytics. --}}
 @extends('layouts.app')
 
 @section('title', 'Performance Dashboard — InternHub')

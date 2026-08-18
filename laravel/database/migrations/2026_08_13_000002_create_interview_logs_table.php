@@ -4,11 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/**
- * Append-only audit trail for the Command pattern used in Module 4 — every
- * Schedule/Reschedule/Cancel/Complete action logs itself here, independent
- * of the interview row's current state.
- */
+/** Append-only audit trail — each Schedule/Reschedule/Cancel/Complete action logs itself here, independent of the interview's current state. */
 return new class extends Migration
 {
     public function up(): void

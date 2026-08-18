@@ -16,7 +16,6 @@
 <body>
 
 <div class="hero-stage">
-    <!-- Global Header -->
     <header class="global-header">
         <a href="#" class="logo">Intern<span>—</span>Hub</a>
         <nav class="nav">
@@ -50,10 +49,8 @@
         </nav>
     </header>
 
-    <!-- The Track -->
     <main class="track" role="region" aria-label="Internship Opportunities">
 
-        <!-- Panel 01 -->
         <article class="panel">
             <div class="panel__bg">
                 <img src="{{ asset('images/public01.jpg') }}"
@@ -66,11 +63,11 @@
                 <p class="details__category">Accounting, Auditing, Finance</p>
                 <h3 class="details__title">Finance &<br>Accounting</h3>
                 <div class="details__meta" data-category="finance">
-                    <div class="details__meta-item"> <!-- No. of companies registered in this section -->
+                    <div class="details__meta-item">
                         <span class="details__meta-value" data-metric="companies">—</span>
                         <span class="details__meta-label">Companies</span>
                     </div>
-                    <div class="details__meta-item"><!-- No. of jobs available -->
+                    <div class="details__meta-item">
                         <span class="details__meta-value" data-metric="jobs">Soon</span>
                         <span class="details__meta-label">Jobs</span>
                     </div>
@@ -86,7 +83,6 @@
             </div>
         </article>
 
-        <!-- Panel 02 -->
         <article class="panel">
             <div class="panel__bg">
                 <img src="{{ asset('images/public02.jpg') }}"
@@ -99,11 +95,11 @@
                 <p class="details__category">Biology, Research, Lab Operations</p>
                 <h3 class="details__title">Biotechnology</h3>
                 <div class="details__meta" data-category="biotechnology">
-                    <div class="details__meta-item"> <!-- No. of companies registered in this section -->
+                    <div class="details__meta-item">
                         <span class="details__meta-value" data-metric="companies">—</span>
                         <span class="details__meta-label">Companies</span>
                     </div>
-                    <div class="details__meta-item"><!-- No. of jobs available -->
+                    <div class="details__meta-item">
                         <span class="details__meta-value" data-metric="jobs">Soon</span>
                         <span class="details__meta-label">Jobs</span>
                     </div>
@@ -119,7 +115,6 @@
             </div>
         </article>
 
-        <!-- Panel 03 -->
         <article class="panel">
             <div class="panel__bg">
                 <img src="{{ asset('images/public03.jpg') }}"
@@ -132,11 +127,11 @@
                 <p class="details__category">Software Development, Data, Cybersecurity</p>
                 <h3 class="details__title">Information<br>Technology</h3>
                 <div class="details__meta" data-category="it">
-                    <div class="details__meta-item"> <!-- No. of companies registered in this section -->
+                    <div class="details__meta-item">
                         <span class="details__meta-value" data-metric="companies">—</span>
                         <span class="details__meta-label">Companies</span>
                     </div>
-                    <div class="details__meta-item"><!-- No. of jobs available -->
+                    <div class="details__meta-item">
                         <span class="details__meta-value" data-metric="jobs">Soon</span>
                         <span class="details__meta-label">Jobs</span>
                     </div>
@@ -151,7 +146,6 @@
             </div>
         </article>
 
-        <!-- Panel 04 -->
         <article class="panel">
             <div class="panel__bg">
                 <img src="{{ asset('images/public04.jpg') }}"
@@ -164,11 +158,11 @@
                 <p class="details__category">Mechanical, Civil, Product Design</p>
                 <h3 class="details__title">Engineering</h3>
                 <div class="details__meta" data-category="engineering">
-                    <div class="details__meta-item"> <!-- No. of companies registered in this section -->
+                    <div class="details__meta-item">
                         <span class="details__meta-value" data-metric="companies">—</span>
                         <span class="details__meta-label">Companies</span>
                     </div>
-                    <div class="details__meta-item"><!-- No. of jobs available -->
+                    <div class="details__meta-item">
                         <span class="details__meta-value" data-metric="jobs">Soon</span>
                         <span class="details__meta-label">Jobs</span>
                     </div>
@@ -183,7 +177,6 @@
             </div>
         </article>
 
-        <!-- Panel 05 -->
         <article class="panel">
             <div class="panel__bg">
                 <img src="{{ asset('images/public05.jpg') }}"
@@ -196,11 +189,11 @@
                 <p class="details__category">Clinical Support, Research, Administration</p>
                 <h3 class="details__title">Healthcare</h3>
                 <div class="details__meta" data-category="healthcare">
-                    <div class="details__meta-item"> <!-- No. of companies registered in this section -->
+                    <div class="details__meta-item">
                         <span class="details__meta-value" data-metric="companies">—</span>
                         <span class="details__meta-label">Companies</span>
                     </div>
-                    <div class="details__meta-item"><!-- No. of jobs available -->
+                    <div class="details__meta-item">
                         <span class="details__meta-value" data-metric="jobs">Soon</span>
                         <span class="details__meta-label">Jobs</span>
                     </div>
@@ -217,14 +210,12 @@
 
     </main>
 
-    <!-- Global Footer -->
     <footer class="global-footer">
         <p class="footer__credit">Internship portal for students and employers &copy; 2026</p>
         <p class="footer__scroll-hint">Hover to Explore</p>
     </footer>
 </div>
 
-    <!-- ============ CTA BANNER (layout: appendMainPage/index.html tm-section-2) ============ -->
     <section class="ext-cta" id="get-started">
         <div class="ext-container">
             <h2 class="ext-heading">Ready To Get Started?</h2>
@@ -234,7 +225,6 @@
         </div>
     </section>
 
-    <!-- ============ WHY INTERNHUB (layout: appendMainPage/index.html 3-article tm-section) ============ -->
     <section class="ext-section" id="why">
         <div class="ext-container" style="text-align:center;">
             <p class="ext-eyebrow" style="justify-content:center;">Why InternHub</p>
@@ -259,7 +249,6 @@
         </div>
     </section>
 
-    <!-- ============ FEATURED COMPANIES (layout: appendMainPage/index.html tm-section-4 carousel + sidebar) ============ -->
     <section class="ext-section ext-section--alt" id="explore">
         <div class="ext-container">
             <p class="ext-eyebrow">Live From The Directory</p>
@@ -273,7 +262,6 @@
         </div>
     </section>
 
-    <!-- ============ GET IN TOUCH (layout: appendMainPage/index.html tm-section-6 map + form) ============ -->
     <section class="ext-section" id="reach">
         <div class="ext-container">
             <p class="ext-eyebrow">Connect</p>
@@ -312,7 +300,6 @@
         </div>
     </section>
 
-    <!-- ============ FOOTER (layout: appendMainPage/index.html copyright bar) ============ -->
     <footer class="ext-footer">
         <div class="ext-footer-links">
             <a href="{{ url('/') }}">Home</a>
@@ -324,7 +311,6 @@
         <p>Copyright &copy; <span id="ext-current-year">2026</span> InternHub — Connecting Students &amp; Employers</p>
     </footer>
 
-    <!-- Internships Modal -->
     <div id="work" class="modal-overlay">
         <a href="#" class="modal__close" aria-label="Close">&times;</a>
         <div class="modal__content">
@@ -357,7 +343,6 @@
         </div>
     </div>
 
-    <!-- How It Works Modal -->
     <div id="how" class="modal-overlay">
         <a href="#" class="modal__close" aria-label="Close">&times;</a>
         <div class="modal__content">
@@ -388,7 +373,6 @@
         </div>
     </div>
 
-    <!-- About Modal -->
     <div id="about" class="modal-overlay">
         <a href="#" class="modal__close" aria-label="Close">&times;</a>
         <div class="modal__content">
@@ -403,7 +387,6 @@
         </div>
     </div>
 
-    <!-- Contact Modal -->
     <div id="contact" class="modal-overlay">
         <a href="#" class="modal__close" aria-label="Close">&times;</a>
         <div class="modal__content">
@@ -433,8 +416,6 @@
     </div>
     <script src="{{ asset('scripts/scriptPublic.js') }}"></script>
     <script>
-        // Pull live company counts per industry from the REST API and fill
-        // in the "companies registered" figure on each panel.
         (function () {
             const categoryKeywords = {
                 finance: ['finance', 'accounting', 'audit', 'bank'],
@@ -474,8 +455,6 @@
                     renderCompanyCarousel([]);
                 });
 
-            // Same idea for the "jobs available" figure — tally published
-            // internships per category from the search API.
             fetch('{{ url('/api/internships') }}?per_page=100', { headers: { Accept: 'application/json' } })
                 .then((res) => (res.ok ? res.json() : Promise.reject()))
                 .then((json) => {
@@ -540,14 +519,13 @@
 
         document.getElementById('ext-current-year').textContent = new Date().getFullYear();
 
-        // --- Google Map for the "Get In Touch" section ---
         function initExtMap() {
             const mapDiv = document.getElementById('ext-map');
             if (!mapDiv) return;
             mapDiv.textContent = '';
 
             new google.maps.Map(mapDiv, {
-                center: { lat: 3.139, lng: 101.6869 }, // Kuala Lumpur — adjust to your real office location
+                center: { lat: 3.139, lng: 101.6869 }, // Kuala Lumpur placeholder — replace with real office location
                 zoom: 12,
             });
         }
@@ -561,7 +539,6 @@
             })();
         @endif
 
-        // --- Nav: swap Login/Register for the logged-in user's avatar + name ---
         (function () {
             const token = localStorage.getItem('internhub_token');
             if (!token) return;

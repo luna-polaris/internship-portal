@@ -8,8 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // Named `user_notifications` rather than `notifications` so it never collides
-        // with Laravel's built-in DatabaseNotification table if that gets added later.
+        // Named `user_notifications` so it never collides with Laravel's built-in DatabaseNotification table.
         Schema::create('user_notifications', function (Blueprint $table) {
             $table->increments('notification_id');
             $table->unsignedInteger('user_id');

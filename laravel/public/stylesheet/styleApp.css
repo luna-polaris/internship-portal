@@ -1,6 +1,5 @@
-/* Shared list/card/badge components for the internship + application pages.
-   Reuses the design tokens from stylePublic.css (:root vars) and layout
-   primitives from styleAuth.css (.auth-header, .auth-main, body.auth-body). */
+/* Shared list/card/badge components for internship + application pages.
+   Reuses tokens from stylePublic.css and layout primitives from styleAuth.css. */
 
 .app-main {
     flex: 1;
@@ -155,7 +154,7 @@
     margin-top: 2rem;
 }
 
-/* Toggle for collapsible "New Posting" form */
+/* Collapsible "New Posting" form toggle */
 .toggle-form-btn {
     margin-bottom: 1.5rem;
 }

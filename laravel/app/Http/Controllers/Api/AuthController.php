@@ -88,14 +88,10 @@ class AuthController extends Controller
             'success' => true,
             'message' => 'Registration successful. Please verify your email to activate your account.',
             'user_id' => $user->user_id,
-            // Masked, not the raw address — enough for the user to confirm
-            // where the link went without echoing the full address back.
             'masked_email' => EmailMasker::mask($user->email),
         ];
 
-        // MAIL_MAILER=log by default (no real SMTP configured), so nothing
-        // actually reaches an inbox locally. Surface the link directly in
-        // dev/local so registration can be tested end-to-end without email.
+        // No real SMTP is configured locally, so surface the link directly for testing.
         if (! app()->environment('production')) {
             $response['dev_verification_link'] = $verificationLink;
         }
@@ -103,11 +99,7 @@ class AuthController extends Controller
         return response()->json($response, 201);
     }
 
-    /**
-     * Student/Employer login. Admins do not use this endpoint — they have a
-     * separate username-based login (see adminLogin()) so the privileged
-     * path is never reachable through the public email/password form.
-     */
+    // Admins use adminLogin() instead, so the privileged path isn't reachable via this form.
     public function login(LoginRequest $request)
     {
         $email = strtolower(trim($request->input('email')));
@@ -135,10 +127,7 @@ class AuthController extends Controller
         ]);
     }
 
-    /**
-     * Admin login uses a username, not an email, and only ever matches
-     * role=Admin accounts — kept separate from login() on purpose.
-     */
+    // Deliberately separate from login(): username-based and Admin-only.
     public function adminLogin(AdminLoginRequest $request)
     {
         $username = trim($request->input('username'));

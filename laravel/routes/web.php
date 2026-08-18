@@ -45,11 +45,6 @@ Route::get('/student/bookmarks', function () {
     return view('student.bookmarks');
 });
 
-/*
-|--------------------------------------------------------------------------
-| Module 3.2 — pages
-|--------------------------------------------------------------------------
-*/
 Route::view('/admin/dashboard', 'admin.dashboard')->name('admin.dashboard');
 
 Route::view('/evaluations', 'evaluations.index')->name('evaluations.index');

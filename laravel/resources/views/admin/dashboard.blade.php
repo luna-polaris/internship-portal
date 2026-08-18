@@ -1,6 +1,4 @@
-{{-- Admin-only overview: registration totals and every internship posting on
-     the platform. Gated client-side by requireRole(['Admin']); the data itself
-     is protected server-side by the role:Admin middleware on /api/admin/*. --}}
+{{-- Gated client-side by requireRole(['Admin']); the data is also protected server-side by the role:Admin middleware on /api/admin/*. --}}
 @extends('layouts.app')
 
 @section('title', 'Admin Dashboard — InternHub')
@@ -9,7 +7,6 @@
 
 @section('content')
 
-  {{-- Registration totals — these two count up from zero on load --}}
   <div class="eval-grid">
     <div class="eval-card">
       <p class="eval-stat-label">Total Students</p>
@@ -29,7 +26,6 @@
     </div>
   </div>
 
-  {{-- Posting totals --}}
   <div class="eval-grid">
     <div class="eval-card">
       <p class="eval-stat-label">Jobs Posted (All)</p>
@@ -53,7 +49,6 @@
     </div>
   </div>
 
-  {{-- Posting details --}}
   <div class="eval-card">
     <h2>Internship Postings</h2>
 
@@ -87,11 +82,7 @@
 
   const headers = { Accept: 'application/json', Authorization: 'Bearer ' + apiToken() };
 
-  /* ---------------------------------------------------------------
-   * Count-up: animate 0 -> target with an ease-out so the number
-   * decelerates into place instead of ticking linearly.
-   * Respects prefers-reduced-motion by jumping straight to the value.
-   * ------------------------------------------------------------- */
+  // Animates 0 -> target with an ease-out; jumps straight to the value under prefers-reduced-motion.
   function countUp(el, target, duration = 1400) {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -110,7 +101,7 @@
       if (progress < 1) {
         requestAnimationFrame(frame);
       } else {
-        el.textContent = target.toLocaleString(); // land exactly on target
+        el.textContent = target.toLocaleString();
       }
     }
 
@@ -129,7 +120,6 @@
       flash('Could not load dashboard totals.', false);
     });
 
-  /* --------------------------- Postings table --------------------------- */
   const wrap = document.getElementById('jobs-wrap');
   const pager = document.getElementById('jobs-pager');
   const pageInfo = document.getElementById('jobs-pageinfo');

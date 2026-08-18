@@ -13,9 +13,7 @@ return new class extends Migration
             $table->unsignedInteger('student_id');
             $table->unsignedInteger('employer_id');
 
-            // Hook for the internship/application module owned by another team member.
-            // Left nullable + unconstrained on purpose so this module migrates and runs
-            // standalone. Once `applications` exists, add the FK in a follow-up migration.
+            // Nullable and unconstrained so this migrates standalone; FK added once `applications` exists.
             $table->unsignedInteger('application_id')->nullable();
 
             $table->enum('period', ['Midterm', 'Final'])->default('Final');
@@ -30,13 +28,12 @@ return new class extends Migration
                   ->default('Draft');
             $table->timestamp('submitted_at')->nullable();
 
-            $table->unsignedInteger('reviewed_by')->nullable();  // users.user_id of the Admin
+            $table->unsignedInteger('reviewed_by')->nullable(); // users.user_id of the Admin
             $table->timestamp('reviewed_at')->nullable();
             $table->text('review_remark')->nullable();
 
             $table->timestamps();
 
-            // One evaluation per student, per employer, per period.
             $table->unique(['student_id', 'employer_id', 'period'], 'evaluations_student_employer_period_unique');
             $table->index('status', 'evaluations_status_index');
 

@@ -1,4 +1,3 @@
-{{-- Function 4 — Feedback Review & Approval. --}}
 @extends('layouts.app')
 
 @section('title', 'Review Evaluations — InternHub')

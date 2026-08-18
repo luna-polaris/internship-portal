@@ -9,9 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('evaluations', function (Blueprint $table) {
-            // Left unconstrained when the evaluations table was created, because
-            // the applications table belonged to another module. Wiring it now
-            // ties each evaluation to the specific placement it describes.
+            // application_id was left unconstrained when evaluations was created; wiring the FK now.
             $table->foreign('application_id', 'evaluations_application_id_foreign')
                   ->references('application_id')->on('applications')
                   ->nullOnDelete();

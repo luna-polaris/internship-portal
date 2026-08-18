@@ -15,8 +15,7 @@ class AdminController extends Controller
 {
     public function dashboardStats()
     {
-        // One grouped query for the posting counts rather than four COUNT(*)
-        // round-trips, since the dashboard shows all of them together.
+        // Single grouped query instead of four separate COUNT(*) calls.
         $byStatus = Internship::selectRaw('status, COUNT(*) AS total')
             ->groupBy('status')
             ->pluck('total', 'status');
@@ -38,10 +37,7 @@ class AdminController extends Controller
         ]);
     }
 
-    /**
-     * Every posting on the platform, including Draft and Closed ones that the
-     * public /api/internships endpoint deliberately hides.
-     */
+    // Unlike the public /api/internships endpoint, this includes Draft and Closed postings.
     public function listInternships(Request $request)
     {
         $query = Internship::with('company:company_id,company_name')

@@ -12,15 +12,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-/**
- * Function 2 — Feedback Submission (employer)
- * Function 4 — Feedback Review & Approval (admin)
- *
- * Visibility rules, in one place:
- *   Employer — every evaluation they wrote, any status
- *   Admin    — everything, filterable by status for the review queue
- *   Student  — only their own, and only once Approved
- */
+// Visibility: employer sees everything they wrote; admin sees everything, filterable by status; student sees only their own once Approved.
 class EvaluationController extends Controller
 {
     public function __construct(private NotificationService $notifications) {}
@@ -55,11 +47,7 @@ class EvaluationController extends Controller
         return response()->json(['data' => $evaluation]);
     }
 
-    /**
-     * Create or update an evaluation. `action=save` keeps it as a Draft the
-     * employer can come back to; `action=submit` locks it and queues it for
-     * admin review.
-     */
+    // action=save keeps it as a Draft; action=submit locks it and queues it for admin review.
     public function store(StoreEvaluationRequest $request): JsonResponse
     {
         $employer = $request->user()->employer;
@@ -119,7 +107,6 @@ class EvaluationController extends Controller
         ], $evaluation->wasRecentlyCreated ? 201 : 200);
     }
 
-    /** Function 4 — approve or send back a submitted evaluation. */
     public function review(ReviewEvaluationRequest $request, Evaluation $evaluation): JsonResponse
     {
         if ($evaluation->status !== Evaluation::STATUS_SUBMITTED) {

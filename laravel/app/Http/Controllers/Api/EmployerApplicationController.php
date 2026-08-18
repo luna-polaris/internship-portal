@@ -64,8 +64,7 @@ class EmployerApplicationController extends Controller
 
         $studentEmail = $application->student?->user?->email;
         if ($studentEmail) {
-            // The employer's own login email is always correct; company_email is an
-            // optional, user-entered field that can be blank, stale, or wrong.
+            // company_email is optional, user-entered, and can be stale — the employer's login email is more reliable.
             $contactEmail = $company->employer?->user?->email ?? $company->company_email;
 
             $body = "Congratulations! Your application for \"{$application->internship->title}\" at {$company->company_name} has been accepted.";

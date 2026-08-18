@@ -14,12 +14,12 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->enum('category', ['Technical', 'Soft Skills', 'Professionalism', 'Other'])
                   ->default('Other');
-            // Highest raw score an evaluator may give for this criterion (e.g. 5 => 1-5 scale)
+            // Highest score an evaluator may give (e.g. 5 => 1-5 scale)
             $table->unsignedTinyInteger('max_score')->default(5);
-            // Contribution to the weighted total, in percent. Active criteria should sum to 100.
+            // Weight toward the total, in percent; active criteria should sum to 100.
             $table->decimal('weight', 5, 2)->default(0);
             $table->boolean('is_active')->default(true);
-            $table->unsignedInteger('created_by')->nullable();   // users.user_id of the Admin
+            $table->unsignedInteger('created_by')->nullable(); // users.user_id of the Admin
             $table->timestamps();
 
             $table->unique('name', 'evaluation_criteria_name_unique');

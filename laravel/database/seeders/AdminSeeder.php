@@ -6,11 +6,7 @@ use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
-/**
- * Creates the initial Admin account. Admins are never created through the
- * public register form, so this is the only way to get one into the system.
- * Credentials come from .env so nothing sensitive is hardcoded in source.
- */
+/** Only way to create an Admin — never done via public register; credentials come from .env. */
 class AdminSeeder extends Seeder
 {
     public function run(): void
