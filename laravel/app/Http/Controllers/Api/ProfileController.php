@@ -37,7 +37,7 @@ class ProfileController extends Controller
     {
         $request->user()->update($request->validated());
 
-        return response()->json(['success' => true, 'message' => 'Profile updated successfully.']);
+        return response()->json(['success' => true, 'message' => 'Full name updated successfully.']);
     }
 
     public function updateEmail(UpdateEmailRequest $request)

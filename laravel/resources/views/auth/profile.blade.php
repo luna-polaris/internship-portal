@@ -39,8 +39,8 @@
             <fieldset id="resume-section" style="display:none;">
                 <legend>Resume</legend>
                 <p id="resume-current" class="field-hint" style="margin-bottom:0.75rem;"></p>
-                <input type="file" id="resume-input" accept=".pdf,.doc,.docx">
-                <p class="field-hint">PDF, DOC, or DOCX. Max 5MB. Required before applying to internships.</p>
+                <input type="file" id="resume-input" accept=".pdf">
+                <p class="field-hint">PDF only. Max 5MB. Required before applying to internships.</p>
                 <button type="button" class="btn-submit" id="resume-submit" style="margin-top:1rem;">Upload Resume</button>
             </fieldset>
 

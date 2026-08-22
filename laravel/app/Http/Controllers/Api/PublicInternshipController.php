@@ -10,7 +10,9 @@ class PublicInternshipController extends Controller
 {
     public function index(Request $request)
     {
-        $filters = $request->only(['q', 'category', 'city', 'state', 'work_mode', 'min_allowance', 'max_allowance']);
+        $filters = $request->only([
+            'q', 'category', 'city', 'state', 'work_mode', 'skills', 'min_allowance', 'max_allowance', 'min_duration', 'max_duration',
+        ]);
 
         $query = Internship::visible()
             ->filter($filters)

@@ -34,13 +34,13 @@ class StudentController extends Controller
 
         $student->update($request->validated());
 
-        return response()->json(['success' => true, 'message' => 'Profile updated successfully.']);
+        return response()->json(['success' => true, 'message' => 'Preferences updated successfully.']);
     }
 
     public function uploadResume(Request $request)
     {
         $request->validate([
-            'resume' => ['required', 'file', 'mimes:pdf,doc,docx', 'max:5120'],
+            'resume' => ['required', 'file', 'mimes:pdf', 'max:5120'],
         ]);
 
         $student = Student::where('user_id', $request->user()->user_id)->first();

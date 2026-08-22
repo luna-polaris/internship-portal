@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\Filters\InternshipFilterRegistry;
 use App\Support\ListSanitizer;
 use Illuminate\Database\Eloquent\Model;
 
@@ -69,17 +70,15 @@ class Internship extends Model
             });
     }
 
+    /** Context: picks whichever filter strategies are relevant to the given input and applies them. */
     public function scopeFilter($query, array $filters)
     {
-        return $query
-            ->when($filters['q'] ?? null, fn ($q, $v) => $q->where(function ($q) use ($v) {
-                $q->where('title', 'like', "%{$v}%")->orWhere('description', 'like', "%{$v}%");
-            }))
-            ->when($filters['category'] ?? null, fn ($q, $v) => $q->where('category', 'like', "%{$v}%"))
-            ->when($filters['city'] ?? null, fn ($q, $v) => $q->where('city', 'like', "%{$v}%"))
-            ->when($filters['state'] ?? null, fn ($q, $v) => $q->where('state', 'like', "%{$v}%"))
-            ->when($filters['work_mode'] ?? null, fn ($q, $v) => $q->where('work_mode', $v))
-            ->when($filters['min_allowance'] ?? null, fn ($q, $v) => $q->where('allowance', '>=', $v))
-            ->when($filters['max_allowance'] ?? null, fn ($q, $v) => $q->where('allowance', '<=', $v));
+        foreach (InternshipFilterRegistry::all() as $strategy) {
+            if ($strategy->supports($filters)) {
+                $strategy->apply($query, $filters);
+            }
+        }
+
+        return $query;
     }
 }
