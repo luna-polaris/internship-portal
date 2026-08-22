@@ -8,6 +8,7 @@ use App\Models\Recommendation;
 use App\Models\Student;
 use App\Services\RecommendationService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class StudentController extends Controller
 {
@@ -47,6 +48,10 @@ class StudentController extends Controller
 
         if (! $student) {
             return response()->json(['success' => false, 'message' => 'Student profile not found.'], 404);
+        }
+
+        if ($student->resume) {
+            Storage::disk('public')->delete($student->resume);
         }
 
         $path = $request->file('resume')->store('resumes', 'public');
