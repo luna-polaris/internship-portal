@@ -139,14 +139,13 @@ pick a different one and update both files plus `APP_URL` to match.
 
 ## 7. Optional configuration
 
-**Real email** (verification links, password resets) — by default
-`MAIL_MAILER=log` writes emails to `storage/logs/laravel.log` instead of
-sending them, and the register/forgot-password API responses include a
-`dev_verification_link` / `dev_reset_link` field (non-production only) so you
-can test the full flow without any email setup. To send real email, switch
-to `MAIL_MAILER=smtp` and fill in your own credentials (e.g. a Gmail address
-+ an [App Password](https://myaccount.google.com/apppasswords) — never a
-normal account password, and never commit it).
+**Real email** (verification links, password resets) — with
+`MAIL_MAILER=log` nothing is actually sent; emails are written to
+`storage/logs/laravel.log`, where you can copy the verification link out for
+testing. To send real email, switch to `MAIL_MAILER=smtp` and fill in your
+own credentials (e.g. a Gmail address + an
+[App Password](https://myaccount.google.com/apppasswords) — never a normal
+account password, and never commit it).
 
 ## Verifying it works
 

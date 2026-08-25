@@ -56,16 +56,6 @@ class User extends Authenticatable
         return $this->hasOne(Admin::class, 'user_id', 'user_id');
     }
 
-    public function isPending(): bool
-    {
-        return $this->status === 'Pending';
-    }
-
-    public function isActive(): bool
-    {
-        return $this->status === 'Active';
-    }
-
     protected function profilePictureUrl(): Attribute
     {
         return Attribute::make(

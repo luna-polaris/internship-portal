@@ -66,10 +66,10 @@
       <p class="eval-empty">Loading postings…</p>
     </div>
 
-    <div class="eval-actions" id="jobs-pager" style="margin-top:1rem;" hidden>
-      <button type="button" class="eval-btn eval-btn--ghost" id="jobs-prev">&larr; Previous</button>
-      <span class="eval-note" id="jobs-pageinfo"></span>
-      <button type="button" class="eval-btn eval-btn--ghost" id="jobs-next">Next &rarr;</button>
+    <div class="eval-pager" id="jobs-pager" hidden>
+      <button type="button" class="eval-btn eval-btn--ghost eval-pager__prev" id="jobs-prev">&larr; Previous</button>
+      <span class="eval-note eval-pager__info" id="jobs-pageinfo"></span>
+      <button type="button" class="eval-btn eval-btn--ghost eval-pager__next" id="jobs-next">Next &rarr;</button>
     </div>
   </div>
 

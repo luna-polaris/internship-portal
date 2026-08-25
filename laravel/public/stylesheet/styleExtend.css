@@ -428,3 +428,50 @@
         min-height: 220px;
     }
 }
+
+/* ============================================
+   ADMIN DASHBOARD — POSTINGS PAGER
+   Previous on the left, page info centred, Next on the right.
+   Uses a 1fr/auto/1fr grid rather than space-between so the middle
+   column sits dead centre regardless of the two button widths.
+   ============================================ */
+.eval-pager {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+/* An author `display` overrides the browser's [hidden] rule, so the
+   hidden state has to be restored explicitly or the pager stays visible
+   when there's only one page. */
+.eval-pager[hidden] {
+    display: none;
+}
+
+.eval-pager__prev {
+    justify-self: start;
+}
+
+.eval-pager__info {
+    justify-self: center;
+    text-align: center;
+}
+
+.eval-pager__next {
+    justify-self: end;
+}
+
+@media (max-width: 640px) {
+    .eval-pager {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        gap: 0.6rem;
+    }
+
+    .eval-pager__prev,
+    .eval-pager__next {
+        justify-self: center;
+    }
+}

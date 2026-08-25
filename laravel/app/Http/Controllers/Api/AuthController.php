@@ -84,19 +84,12 @@ class AuthController extends Controller
             $message->to($user->email)->subject('Verify your InternHub account');
         });
 
-        $response = [
+        return response()->json([
             'success' => true,
             'message' => 'Registration successful. Please verify your email to activate your account.',
             'user_id' => $user->user_id,
             'masked_email' => EmailMasker::mask($user->email),
-        ];
-
-        // No real SMTP is configured locally, so surface the link directly for testing.
-        if (! app()->environment('production')) {
-            $response['dev_verification_link'] = $verificationLink;
-        }
-
-        return response()->json($response, 201);
+        ], 201);
     }
 
     // Admins use adminLogin() instead, so the privileged path isn't reachable via this form.
@@ -180,12 +173,6 @@ class AuthController extends Controller
         $email = strtolower(trim(request()->input('email', '')));
         $user = User::where('email', $email)->first();
 
-        $response = [
-            'success' => true,
-            'message' => 'If that email is registered, a reset link has been sent.',
-        ];
-
-        // Don't reveal whether the email exists.
         if ($user) {
             $token = Str::random(64);
             $user->forceFill(['token' => $token, 'token_expires_at' => now()->addHour()])->save();
@@ -194,13 +181,13 @@ class AuthController extends Controller
             Mail::raw("Reset your password: {$resetLink}", function ($message) use ($user) {
                 $message->to($user->email)->subject('Reset your InternHub password');
             });
-
-            if (! app()->environment('production')) {
-                $response['dev_reset_link'] = $resetLink;
-            }
         }
 
-        return response()->json($response);
+        // Same response either way, so this can't be used to discover which emails exist.
+        return response()->json([
+            'success' => true,
+            'message' => 'If that email is registered, a reset link has been sent.',
+        ]);
     }
 
     public function resetPassword(ResetPasswordRequest $request)
