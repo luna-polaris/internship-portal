@@ -45,7 +45,7 @@ class RegisterRequest extends FormRequest
 
             'position' => ['nullable', 'string', 'max:100'],
             'department' => ['nullable', 'string', 'max:100'],
-            'company_name' => ['required_if:role,Employer', 'string', 'max:150'],
+            'company_name' => ['required_if:role,Employer', 'string', 'max:150', 'unique:companies,company_name'],
             'company_email' => ['nullable', 'email', 'max:100'],
             'company_phone' => ['nullable', 'string', 'regex:/^01[0-9]{8,9}$/'],
             'industry' => ['nullable', 'string', 'max:100'],
@@ -74,6 +74,7 @@ class RegisterRequest extends FormRequest
             'matric_no.required_if' => 'Matric number is required for students.',
             'matric_no.unique' => 'That matric number is already registered.',
             'company_name.required_if' => 'Company name is required for employers.',
+            'company_name.unique' => 'That company name is already registered.',
 
             'cgpa.between' => 'CGPA must be between 0.00 and 4.00.',
         ];

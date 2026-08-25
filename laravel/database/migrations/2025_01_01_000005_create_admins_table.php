@@ -11,7 +11,6 @@ return new class extends Migration
         Schema::create('admins', function (Blueprint $table) {
             $table->increments('admin_id');
             $table->unsignedInteger('user_id')->unique();
-            $table->enum('admin_level', ['Super Admin', 'Moderator'])->default('Moderator');
 
             $table->foreign('user_id')
                 ->references('user_id')->on('users')

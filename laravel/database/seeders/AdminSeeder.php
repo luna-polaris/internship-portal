@@ -36,10 +36,7 @@ class AdminSeeder extends Seeder
             'status' => 'Active',
         ]);
 
-        Admin::create([
-            'user_id' => $user->user_id,
-            'admin_level' => 'Super Admin',
-        ]);
+        Admin::create(['user_id' => $user->user_id]);
 
         $this->command->info("Admin '{$username}' created.");
     }

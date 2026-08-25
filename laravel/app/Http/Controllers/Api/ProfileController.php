@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DeleteAccountRequest;
 use App\Http\Requests\UpdateBasicInfoRequest;
 use App\Http\Requests\UpdateEmailRequest;
 use App\Models\Admin;
 use App\Models\Employer;
 use App\Models\Student;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -21,7 +24,8 @@ class ProfileController extends Controller
 
         $model = match ($user->role) {
             'Student' => Student::with('user')->where('user_id', $user->user_id)->first(),
-            'Employer' => Employer::with('user')->where('user_id', $user->user_id)->first(),
+            // `company` is needed so the profile page can prefill the employer's company form.
+            'Employer' => Employer::with(['user', 'company'])->where('user_id', $user->user_id)->first(),
             'Admin' => Admin::with('user')->where('user_id', $user->user_id)->first(),
             default => null,
         };
@@ -73,5 +77,49 @@ class ProfileController extends Controller
             'message' => 'Profile picture updated.',
             'profile_picture_url' => $user->fresh()->profile_picture_url,
         ]);
+    }
+
+    /**
+     * Permanently delete the signed-in user's own account.
+     *
+     * The database cascades from `users`, so this also removes the student or
+     * employer row and everything hanging off it — for an employer that means
+     * their company, its internship postings, and every application made to
+     * them. The UI warns about that before calling this.
+     */
+    public function destroy(DeleteAccountRequest $request)
+    {
+        $user = $request->user();
+
+        if (! Hash::check($request->input('password'), $user->password)) {
+            return response()->json(['success' => false, 'message' => 'Password is incorrect.'], 422);
+        }
+
+        // Refuse to leave the platform with nobody able to administer it.
+        if ($user->role === 'Admin' && User::where('role', 'Admin')->count() <= 1) {
+            return response()->json([
+                'success' => false,
+                'message' => 'This is the only admin account, so it cannot be deleted.',
+            ], 422);
+        }
+
+        // Uploaded files live on disk and aren't covered by the FK cascade, so
+        // collect their paths before the rows disappear.
+        $user->loadMissing(['student', 'employer.company']);
+        $files = array_filter([
+            $user->profile_picture,
+            $user->student?->resume,
+            $user->employer?->company?->logo,
+        ]);
+
+        DB::transaction(function () use ($user) {
+            // Sanctum tokens have no foreign key to users, so they'd be orphaned.
+            $user->tokens()->delete();
+            $user->delete();
+        });
+
+        Storage::disk('public')->delete($files);
+
+        return response()->json(['success' => true, 'message' => 'Your account has been permanently deleted.']);
     }
 }

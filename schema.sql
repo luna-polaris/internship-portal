@@ -39,7 +39,6 @@ DROP TABLE IF EXISTS `admins`;
 CREATE TABLE `admins` (
   `admin_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
-  `admin_level` enum('Super Admin','Moderator') NOT NULL DEFAULT 'Moderator',
   PRIMARY KEY (`admin_id`),
   UNIQUE KEY `admins_user_id_unique` (`user_id`),
   CONSTRAINT `admins_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE

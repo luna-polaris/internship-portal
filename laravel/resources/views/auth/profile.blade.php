@@ -87,6 +87,102 @@
                 <button type="submit" class="btn-submit">Save Preferences</button>
             </form>
 
+            {{-- Employer-only: their own role at the company --}}
+            <form id="employer-profile-form" novalidate style="display:none;">
+                <fieldset>
+                    <legend>Job Details</legend>
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label for="position">Your Position</label>
+                            <input type="text" id="position" name="position" maxlength="100">
+                        </div>
+                        <div class="field-group">
+                            <label for="department">Department</label>
+                            <input type="text" id="department" name="department" maxlength="100">
+                        </div>
+                    </div>
+                </fieldset>
+                <button type="submit" class="btn-submit">Save Job Details</button>
+            </form>
+
+            <fieldset id="company-logo-section" style="display:none;">
+                <legend>Company Logo</legend>
+                <div style="display:flex; align-items:center; gap:24px; margin-bottom:1rem;">
+                    <div id="logo-preview" style="width:80px; height:80px; border:1px solid var(--steel); background:var(--carbon); background-size:cover; background-position:center; display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:0.65rem; color:var(--ash); text-align:center; flex-shrink:0;">No logo</div>
+                    <div style="flex:1;">
+                        <input type="file" id="logo-input" accept="image/png,image/jpeg,image/webp">
+                        <p class="field-hint">JPG, PNG, or WEBP. Max 2MB.</p>
+                    </div>
+                </div>
+                <button type="button" class="btn-submit" id="logo-submit">Upload Logo</button>
+            </fieldset>
+
+            <form id="company-form" novalidate style="display:none;">
+                <fieldset>
+                    <legend>Company Details</legend>
+
+                    <div class="field-group">
+                        <label for="company_name">Company Name <span class="req">*</span></label>
+                        <input type="text" id="company_name" name="company_name" maxlength="150" required>
+                    </div>
+
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label for="registration_no">Registration No.</label>
+                            <input type="text" id="registration_no" name="registration_no" maxlength="50">
+                        </div>
+                        <div class="field-group">
+                            <label for="industry">Industry</label>
+                            <input type="text" id="industry" name="industry" maxlength="100">
+                        </div>
+                    </div>
+
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label for="company_email">Company Email</label>
+                            <input type="email" id="company_email" name="company_email" maxlength="100">
+                        </div>
+                        <div class="field-group">
+                            <label for="company_phone">Company Phone</label>
+                            <input type="tel" id="company_phone" name="company_phone" maxlength="11">
+                            <p class="field-hint">Starts with 01, 10&ndash;11 digits total.</p>
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <label for="website">Website</label>
+                        <input type="text" id="website" name="website" maxlength="150">
+                    </div>
+
+                    <div class="field-group">
+                        <label for="address">Address</label>
+                        <input type="text" id="address" name="address">
+                    </div>
+
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label for="city">City</label>
+                            <input type="text" id="city" name="city" maxlength="100">
+                        </div>
+                        <div class="field-group">
+                            <label for="state">State</label>
+                            <input type="text" id="state" name="state" maxlength="100">
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <label for="postcode">Postcode</label>
+                        <input type="text" id="postcode" name="postcode" maxlength="10">
+                    </div>
+
+                    <div class="field-group">
+                        <label for="company_description">Company Description</label>
+                        <textarea id="company_description" name="description"></textarea>
+                    </div>
+                </fieldset>
+                <button type="submit" class="btn-submit">Save Company Details</button>
+            </form>
+
             <form id="fullname-form" novalidate>
                 <fieldset>
                     <legend>Full Name</legend>
@@ -142,6 +238,27 @@
                 </fieldset>
                 <button type="submit" class="btn-submit">Change Password</button>
             </form>
+
+            {{-- Deletion cascades through the database, so spell out what goes with it. --}}
+            <form id="delete-form" class="danger-zone" novalidate>
+                <fieldset>
+                    <legend class="danger-zone__legend">Delete Account</legend>
+
+                    <p class="danger-zone__lead">
+                        This permanently deletes your account. It cannot be undone.
+                    </p>
+
+                    <p class="danger-zone__lead">The following will also be removed:</p>
+                    <ul class="danger-zone__list" id="delete-consequences"></ul>
+
+                    <div class="field-group">
+                        <label for="delete_password">Confirm Your Password <span class="req">*</span></label>
+                        <input type="password" id="delete_password" name="password" required>
+                        <p class="field-hint">Required &mdash; proves it&rsquo;s really you before anything is deleted.</p>
+                    </div>
+                </fieldset>
+                <button type="submit" class="btn-danger" id="delete-submit">Delete My Account Permanently</button>
+            </form>
         </div>
     </main>
 
@@ -192,6 +309,36 @@
             return value.split(',').map((v) => v.trim()).filter((v) => v !== '');
         }
 
+        function applyEmployerProfile(employer) {
+            document.getElementById('employer-profile-form').style.display = 'block';
+            document.getElementById('company-logo-section').style.display = 'block';
+            document.getElementById('company-form').style.display = 'block';
+
+            document.getElementById('position').value = employer.position || '';
+            document.getElementById('department').value = employer.department || '';
+
+            const company = employer.company;
+            if (!company) return;
+
+            document.getElementById('company_name').value = company.company_name || '';
+            document.getElementById('registration_no').value = company.registration_no || '';
+            document.getElementById('industry').value = company.industry || '';
+            document.getElementById('company_email').value = company.company_email || '';
+            document.getElementById('company_phone').value = company.company_phone || '';
+            document.getElementById('website').value = company.website || '';
+            document.getElementById('address').value = company.address || '';
+            document.getElementById('city').value = company.city || '';
+            document.getElementById('state').value = company.state || '';
+            document.getElementById('postcode').value = company.postcode || '';
+            document.getElementById('company_description').value = company.description || '';
+
+            if (company.logo) {
+                const preview = document.getElementById('logo-preview');
+                preview.style.backgroundImage = `url({{ url('/storage') }}/${company.logo})`;
+                preview.textContent = '';
+            }
+        }
+
         function applyStudentProfile(student) {
             document.getElementById('student-profile-form').style.display = 'block';
             document.getElementById('programme').value = student.programme || '';
@@ -205,7 +352,12 @@
 
         fetch('{{ url('/api/me') }}', { headers: authHeaders })
             .then((res) => (res.ok ? res.json() : Promise.reject()))
-            .then((json) => applyUser(json.data))
+            .then((json) => {
+                applyUser(json.data);
+                if (localStorage.getItem('internhub_role') === 'Employer') {
+                    applyEmployerProfile(json.data);
+                }
+            })
             .catch(() => showAlert('Could not load your profile. Try logging in again.', 'error'));
 
         if (localStorage.getItem('internhub_role') === 'Student') {
@@ -327,6 +479,134 @@
                 showAlert(data.message, 'success');
             } catch (err) {
                 showAlert('Network error. Please try again.', 'error');
+            }
+        });
+
+        /* ----------------------------- Employer ----------------------------- */
+
+        document.getElementById('employer-profile-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const { ok, data } = await submitJson('{{ url('/api/employer/profile') }}', 'PUT', {
+                position: document.getElementById('position').value,
+                department: document.getElementById('department').value,
+            });
+            showAlert(ok ? data.message : (data.errors ? Object.values(data.errors)[0][0] : data.message), ok ? 'success' : 'error');
+        });
+
+        document.getElementById('company-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const { ok, data } = await submitJson('{{ url('/api/employer/company') }}', 'PUT', {
+                company_name: document.getElementById('company_name').value,
+                registration_no: document.getElementById('registration_no').value,
+                industry: document.getElementById('industry').value,
+                company_email: document.getElementById('company_email').value,
+                company_phone: document.getElementById('company_phone').value,
+                website: document.getElementById('website').value,
+                address: document.getElementById('address').value,
+                city: document.getElementById('city').value,
+                state: document.getElementById('state').value,
+                postcode: document.getElementById('postcode').value,
+                description: document.getElementById('company_description').value,
+            });
+            showAlert(ok ? data.message : (data.errors ? Object.values(data.errors)[0][0] : data.message), ok ? 'success' : 'error');
+        });
+
+        document.getElementById('logo-submit').addEventListener('click', async () => {
+            const fileInput = document.getElementById('logo-input');
+            if (!fileInput.files.length) {
+                showAlert('Choose an image file first.', 'error');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('logo', fileInput.files[0]);
+
+            try {
+                const response = await fetch('{{ url('/api/employer/company/logo') }}', {
+                    method: 'POST',
+                    headers: authHeaders,
+                    body: formData,
+                });
+                const data = await response.json();
+
+                if (!response.ok) {
+                    showAlert(data.errors ? Object.values(data.errors)[0][0] : data.message, 'error');
+                    return;
+                }
+
+                const preview = document.getElementById('logo-preview');
+                preview.style.backgroundImage = `url({{ url('/storage') }}/${data.path})`;
+                preview.textContent = '';
+                showAlert(data.message, 'success');
+            } catch (err) {
+                showAlert('Network error. Please try again.', 'error');
+            }
+        });
+
+        /* --------------------------- Delete account --------------------------- */
+
+        // Spelled out per role, because the delete cascades further for employers.
+        (function describeDeletion() {
+            const role = localStorage.getItem('internhub_role');
+            const items = {
+                Student: [
+                    'Your student profile, CGPA, skills and preferences',
+                    'Your uploaded resume',
+                    'Every internship application and bookmark you have made',
+                ],
+                Employer: [
+                    'Your employer profile and company details',
+                    'Every internship posting your company has created',
+                    'Every application students have submitted to those postings',
+                ],
+                Admin: [
+                    'Your administrator account and its access',
+                ],
+            }[role] || ['All data linked to your account'];
+
+            document.getElementById('delete-consequences').innerHTML =
+                items.map((i) => `<li>${i}</li>`).join('');
+        })();
+
+        document.getElementById('delete-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const password = document.getElementById('delete_password').value;
+            if (!password) {
+                showAlert('Enter your password to confirm account deletion.', 'error');
+                return;
+            }
+
+            if (!window.confirm('Delete your account permanently? This cannot be undone.')) {
+                return;
+            }
+
+            const button = document.getElementById('delete-submit');
+            button.disabled = true;
+            button.textContent = 'Deleting...';
+
+            try {
+                const response = await fetch('{{ url('/api/me') }}', {
+                    method: 'DELETE',
+                    headers: { ...authHeaders, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password }),
+                });
+                const data = await response.json();
+
+                if (!response.ok) {
+                    showAlert(data.errors ? Object.values(data.errors)[0][0] : data.message, 'error');
+                    return;
+                }
+
+                localStorage.removeItem('internhub_token');
+                localStorage.removeItem('internhub_role');
+                showAlert(data.message, 'success');
+                setTimeout(() => { window.location.href = '{{ url('/') }}'; }, 1500);
+            } catch (err) {
+                showAlert('Network error. Please try again.', 'error');
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Delete My Account Permanently';
             }
         });
     </script>

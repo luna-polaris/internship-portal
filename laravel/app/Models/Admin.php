@@ -11,7 +11,6 @@ class Admin extends Model
 
     protected $fillable = [
         'user_id',
-        'admin_level',
     ];
 
     public function user()
@@ -19,13 +18,4 @@ class Admin extends Model
         return $this->belongsTo(User::class, 'user_id', 'user_id');
     }
 
-    public function promote(): bool
-    {
-        return $this->update(['admin_level' => 'Super Admin']);
-    }
-
-    public function demote(): bool
-    {
-        return $this->update(['admin_level' => 'Moderator']);
-    }
 }

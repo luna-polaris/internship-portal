@@ -331,6 +331,74 @@ fieldset legend {
     text-align: center;
 }
 
+/* Delete-account section — visually separated so it can't be mistaken
+   for the ordinary "save my changes" forms above it. */
+.danger-zone {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--steel);
+}
+
+.danger-zone__legend {
+    color: #ff9c9c;
+    border-bottom-color: rgba(220, 60, 60, 0.4);
+}
+
+.danger-zone__lead {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    line-height: 1.7;
+    color: rgba(240, 240, 240, 0.75);
+    margin-bottom: 0.75rem;
+}
+
+.danger-zone__list {
+    list-style: none;
+    margin: 0 0 1.5rem;
+    padding: 0;
+}
+
+.danger-zone__list li {
+    position: relative;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    line-height: 1.6;
+    color: var(--ash);
+    padding: 0.15rem 0 0.15rem 1.1rem;
+}
+
+.danger-zone__list li::before {
+    content: '\2013';
+    position: absolute;
+    left: 0;
+    color: #dc3c3c;
+}
+
+.btn-danger {
+    width: 100%;
+    background: transparent;
+    color: #ff9c9c;
+    border: 1px solid #dc3c3c;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.95rem;
+    padding: 1rem;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.btn-danger:hover {
+    background: #dc3c3c;
+    color: var(--off-white);
+}
+
+.btn-danger:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 /* Required-field marker. */
 .req {
     color: var(--neon-chartreuse);

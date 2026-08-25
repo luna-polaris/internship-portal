@@ -19,12 +19,13 @@ use App\Http\Controllers\Api\StudentApplicationController;
 use App\Http\Controllers\Api\StudentController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/admin/login', [AuthController::class, 'adminLogin']);
-Route::get('/verify-email', [AuthController::class, 'verifyEmail']);
-Route::post('/password/forgot', [AuthController::class, 'requestPasswordReset']);
-Route::post('/password/reset', [AuthController::class, 'resetPassword']);
+// Credential-handling endpoints are throttled; see AppServiceProvider::configureRateLimiting().
+Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:register');
+Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:login');
+Route::post('/admin/login', [AuthController::class, 'adminLogin'])->middleware('throttle:login');
+Route::get('/verify-email', [AuthController::class, 'verifyEmail'])->middleware('throttle:token');
+Route::post('/password/forgot', [AuthController::class, 'requestPasswordReset'])->middleware('throttle:password-forgot');
+Route::post('/password/reset', [AuthController::class, 'resetPassword'])->middleware('throttle:token');
 
 Route::get('/companies', [CompanyController::class, 'index']);
 Route::get('/companies/search', [CompanyController::class, 'search']);
@@ -41,6 +42,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/me', [ProfileController::class, 'updateBasicInfo']);
     Route::put('/me/email', [ProfileController::class, 'updateEmail']);
     Route::post('/me/avatar', [ProfileController::class, 'uploadAvatar']);
+    Route::delete('/me', [ProfileController::class, 'destroy']);
 
     Route::middleware('role:Student')->group(function () {
         Route::get('/student/profile', [StudentController::class, 'show']);
@@ -84,8 +86,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('/users/{user}/activate', [AdminController::class, 'activateUser']);
         Route::patch('/users/{user}/deactivate', [AdminController::class, 'deactivateUser']);
         Route::delete('/users/{user}', [AdminController::class, 'deleteUser']);
-        Route::patch('/users/{user}/promote', [AdminController::class, 'promoteAdmin']);
-        Route::patch('/users/{user}/demote', [AdminController::class, 'demoteAdmin']);
         Route::get('/internships', [AdminController::class, 'listInternships']);
         Route::get('/students', [StudentController::class, 'index']);
         Route::get('/employers', [EmployerController::class, 'index']);

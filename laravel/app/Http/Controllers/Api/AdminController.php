@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin;
 use App\Models\Company;
 use App\Models\Employer;
 use App\Models\Internship;
@@ -98,29 +97,4 @@ class AdminController extends Controller
         return response()->json(['success' => true, 'message' => 'User deleted.']);
     }
 
-    public function promoteAdmin(User $user)
-    {
-        $admin = Admin::where('user_id', $user->user_id)->first();
-
-        if (! $admin) {
-            return response()->json(['success' => false, 'message' => 'This user is not an admin.'], 422);
-        }
-
-        $admin->promote();
-
-        return response()->json(['success' => true, 'message' => 'Admin promoted to Super Admin.']);
-    }
-
-    public function demoteAdmin(User $user)
-    {
-        $admin = Admin::where('user_id', $user->user_id)->first();
-
-        if (! $admin) {
-            return response()->json(['success' => false, 'message' => 'This user is not an admin.'], 422);
-        }
-
-        $admin->demote();
-
-        return response()->json(['success' => true, 'message' => 'Admin demoted to Moderator.']);
-    }
 }
