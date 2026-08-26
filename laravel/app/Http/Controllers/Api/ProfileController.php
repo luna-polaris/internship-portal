@@ -9,7 +9,6 @@ use App\Http\Requests\UpdateEmailRequest;
 use App\Models\Admin;
 use App\Models\Employer;
 use App\Models\Student;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -89,18 +88,11 @@ class ProfileController extends Controller
      */
     public function destroy(DeleteAccountRequest $request)
     {
+        // Admins are blocked upstream by DeleteAccountRequest::authorize().
         $user = $request->user();
 
         if (! Hash::check($request->input('password'), $user->password)) {
             return response()->json(['success' => false, 'message' => 'Password is incorrect.'], 422);
-        }
-
-        // Refuse to leave the platform with nobody able to administer it.
-        if ($user->role === 'Admin' && User::where('role', 'Admin')->count() <= 1) {
-            return response()->json([
-                'success' => false,
-                'message' => 'This is the only admin account, so it cannot be deleted.',
-            ], 422);
         }
 
         // Uploaded files live on disk and aren't covered by the FK cascade, so

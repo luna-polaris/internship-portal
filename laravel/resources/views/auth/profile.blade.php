@@ -548,6 +548,14 @@
         // Spelled out per role, because the delete cascades further for employers.
         (function describeDeletion() {
             const role = localStorage.getItem('internhub_role');
+
+            // Admins can't delete their own account, so don't offer it.
+            // The API refuses it as well, whatever the browser shows.
+            if (role === 'Admin') {
+                document.getElementById('delete-form').style.display = 'none';
+                return;
+            }
+
             const items = {
                 Student: [
                     'Your student profile, CGPA, skills and preferences',
@@ -558,9 +566,6 @@
                     'Your employer profile and company details',
                     'Every internship posting your company has created',
                     'Every application students have submitted to those postings',
-                ],
-                Admin: [
-                    'Your administrator account and its access',
                 ],
             }[role] || ['All data linked to your account'];
 
