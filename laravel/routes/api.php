@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\InternshipController;
 use App\Http\Controllers\Api\InterviewController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\PublicInternshipController;
+use App\Http\Controllers\Api\WebService\InternshipStatsServiceController;
 use App\Http\Controllers\Api\WebService\UserInfoServiceController;
 use App\Http\Controllers\Api\StudentApplicationController;
 use App\Http\Controllers\Api\StudentController;
@@ -35,6 +36,7 @@ Route::post('/password/reset', [AuthController::class, 'resetPassword'])->middle
 // ---------------------------------------------------------------------------
 Route::prefix('ws')->middleware(['service.key', 'throttle:webservice'])->group(function () {
     Route::post('/user-info', [UserInfoServiceController::class, 'getUserInfo'])->name('ws.user-info');
+    Route::post('/internship-stats', [InternshipStatsServiceController::class, 'getInternshipStats'])->name('ws.internship-stats');
 });
 
 Route::get('/companies', [CompanyController::class, 'index']);

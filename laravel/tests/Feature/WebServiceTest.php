@@ -155,6 +155,119 @@ class WebServiceTest extends TestCase
         }
     }
 
+    // ------------------------------------------ exposure: getInternshipStats
+
+    private function seedInternships(): void
+    {
+        $employer = User::create([
+            'full_name' => 'Lim Hui Ying',
+            'email' => 'hui@acme.com',
+            'password' => 'Str0ng!Passw0rd#1',
+            'role' => 'Employer',
+            'status' => 'Active',
+        ])->employer()->create([]);
+
+        $company = $employer->company()->create(['company_name' => 'Acme Sdn Bhd']);
+
+        $postings = [
+            ['Published', 3], ['Published', 2], ['Draft', 5], ['Closed', 1],
+        ];
+
+        foreach ($postings as $i => [$status, $vacancies]) {
+            $company->internships()->create([
+                'title' => 'Intern ' . $i,
+                'description' => 'Work',
+                'work_mode' => 'Hybrid',
+                'vacancies' => $vacancies,
+                'application_deadline' => now()->addMonth()->toDateString(),
+                'status' => $status,
+            ]);
+        }
+    }
+
+    public function test_get_internship_stats_returns_the_agreed_totals(): void
+    {
+        $this->seedInternships();
+
+        $this->withHeaders($this->headers())
+            ->postJson('/api/ws/internship-stats', [
+                'requestId' => 'REQ-STATS-01',
+                'timeStamp' => now()->format('Y-m-d H:i:s'),
+            ])
+            ->assertOk()
+            ->assertJsonPath('status', 'S')
+            ->assertJsonPath('requestId', 'REQ-STATS-01')
+            ->assertJsonPath('totalInternships', 4)
+            ->assertJsonPath('publishedInternships', 2)
+            ->assertJsonPath('draftInternships', 1)
+            ->assertJsonPath('closedInternships', 1)
+            ->assertJsonPath('totalVacancies', 11)
+            ->assertJsonStructure(['status', 'requestId', 'totalInternships', 'publishedInternships',
+                'draftInternships', 'closedInternships', 'totalVacancies', 'timeStamp']);
+    }
+
+    public function test_get_internship_stats_reports_zeroes_rather_than_failing_when_empty(): void
+    {
+        $this->withHeaders($this->headers())
+            ->postJson('/api/ws/internship-stats', [
+                'requestId' => 'REQ-STATS-02',
+                'timeStamp' => now()->format('Y-m-d H:i:s'),
+            ])
+            ->assertOk()
+            ->assertJsonPath('status', 'S')
+            ->assertJsonPath('totalInternships', 0)
+            ->assertJsonPath('totalVacancies', 0);
+    }
+
+    public function test_get_internship_stats_requires_a_request_id(): void
+    {
+        $this->withHeaders($this->headers())
+            ->postJson('/api/ws/internship-stats', [
+                'timeStamp' => now()->format('Y-m-d H:i:s'),
+            ])
+            ->assertStatus(422)
+            ->assertJsonPath('status', 'E')
+            ->assertJsonPath('errors.requestId.0', 'requestId is required so the call can be traced.');
+    }
+
+    public function test_get_internship_stats_requires_the_service_key(): void
+    {
+        $this->postJson('/api/ws/internship-stats', [
+            'requestId' => 'REQ-STATS-03',
+            'timeStamp' => now()->format('Y-m-d H:i:s'),
+        ])
+            ->assertStatus(401)
+            ->assertJsonPath('status', 'E')
+            ->assertJsonPath('requestId', 'REQ-STATS-03');
+    }
+
+    /**
+     * Round-trip: the real client, calling the real provider, with only the network
+     * hop faked. This is what proves the two halves of the contract actually agree
+     * rather than each matching a hand-written fixture.
+     */
+    public function test_client_and_provider_agree_end_to_end(): void
+    {
+        $this->seedInternships();
+
+        Http::fake(function ($request) {
+            $inner = $this->withHeaders(['X-Service-Key' => self::KEY])
+                ->postJson('/api/ws/internship-stats', $request->data());
+
+            return Http::response($inner->json(), $inner->status());
+        });
+
+        $stats = app(InternshipStatsClient::class)->fetch();
+
+        $this->assertSame([
+            'totalInternships' => 4,
+            'publishedInternships' => 2,
+            'draftInternships' => 1,
+            'closedInternships' => 1,
+            'totalVacancies' => 11,
+        ], $stats);
+    }
+
     // ------------------------------------------------------------- consumption
 
     public function test_client_reads_a_successful_provider_response(): void
