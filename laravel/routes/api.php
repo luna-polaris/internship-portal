@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\InternshipController;
 use App\Http\Controllers\Api\InterviewController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\PublicInternshipController;
+use App\Http\Controllers\Api\WebService\UserInfoServiceController;
 use App\Http\Controllers\Api\StudentApplicationController;
 use App\Http\Controllers\Api\StudentController;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,15 @@ Route::post('/admin/login', [AuthController::class, 'adminLogin'])->middleware('
 Route::get('/verify-email', [AuthController::class, 'verifyEmail'])->middleware('throttle:token');
 Route::post('/password/forgot', [AuthController::class, 'requestPasswordReset'])->middleware('throttle:password-forgot');
 Route::post('/password/reset', [AuthController::class, 'resetPassword'])->middleware('throttle:token');
+
+// ---------------------------------------------------------------------------
+// Web services exposed to other modules (Interface Agreement).
+// Authenticated by a shared service key, not by a user token; throttled so a
+// misbehaving consumer cannot exhaust this module.
+// ---------------------------------------------------------------------------
+Route::prefix('ws')->middleware(['service.key', 'throttle:webservice'])->group(function () {
+    Route::post('/user-info', [UserInfoServiceController::class, 'getUserInfo'])->name('ws.user-info');
+});
 
 Route::get('/companies', [CompanyController::class, 'index']);
 Route::get('/companies/search', [CompanyController::class, 'search']);

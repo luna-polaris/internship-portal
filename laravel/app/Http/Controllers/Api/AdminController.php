@@ -8,16 +8,17 @@ use App\Models\Employer;
 use App\Models\Internship;
 use App\Models\Student;
 use App\Models\User;
+use App\Services\InternshipStatsClient;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    public function dashboardStats()
+    // Posting figures belong to the Internship module, so they are requested over the
+    // Interface Agreement rather than queried here. localInternshipStats() covers the
+    // window where that service is unavailable.
+    public function dashboardStats(InternshipStatsClient $internshipStats)
     {
-        // Single grouped query instead of four separate COUNT(*) calls.
-        $byStatus = Internship::selectRaw('status, COUNT(*) AS total')
-            ->groupBy('status')
-            ->pluck('total', 'status');
+        $postings = $internshipStats->fetch() ?? $this->localInternshipStats();
 
         return response()->json([
             'success' => true,
@@ -27,13 +28,37 @@ class AdminController extends Controller
                 'total_companies' => Company::count(),
                 'pending_users' => User::where('status', 'Pending')->count(),
 
-                'total_internships' => (int) $byStatus->sum(),
-                'published_internships' => (int) $byStatus->get('Published', 0),
-                'draft_internships' => (int) $byStatus->get('Draft', 0),
-                'closed_internships' => (int) $byStatus->get('Closed', 0),
-                'total_vacancies' => (int) Internship::sum('vacancies'),
+                'total_internships' => $postings['totalInternships'],
+                'published_internships' => $postings['publishedInternships'],
+                'draft_internships' => $postings['draftInternships'],
+                'closed_internships' => $postings['closedInternships'],
+                'total_vacancies' => $postings['totalVacancies'],
             ],
         ]);
+    }
+
+    /**
+     * Fallback used only when getInternshipStats cannot be reached. It reproduces the
+     * same figures locally, which means it keeps the direct dependency on the
+     * Internship module's table that the web service exists to remove — so this
+     * method should go once that service is deployed for every developer.
+     *
+     * @return array{totalInternships:int, publishedInternships:int, draftInternships:int, closedInternships:int, totalVacancies:int}
+     */
+    private function localInternshipStats(): array
+    {
+        // Single grouped query instead of four separate COUNT(*) calls.
+        $byStatus = Internship::selectRaw('status, COUNT(*) AS total')
+            ->groupBy('status')
+            ->pluck('total', 'status');
+
+        return [
+            'totalInternships' => (int) $byStatus->sum(),
+            'publishedInternships' => (int) $byStatus->get('Published', 0),
+            'draftInternships' => (int) $byStatus->get('Draft', 0),
+            'closedInternships' => (int) $byStatus->get('Closed', 0),
+            'totalVacancies' => (int) Internship::sum('vacancies'),
+        ];
     }
 
     // Unlike the public /api/internships endpoint, this includes Draft and Closed postings.

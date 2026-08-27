@@ -53,5 +53,9 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('token', fn (Request $request) => Limit::perMinute(10)->by($request->ip()));
 
         RateLimiter::for('register', fn (Request $request) => Limit::perMinute(5)->by($request->ip()));
+
+        // Module-to-module traffic: generous compared with the human-facing limits,
+        // but still bounded so one consumer in a retry loop cannot starve the rest.
+        RateLimiter::for('webservice', fn (Request $request) => Limit::perMinute(120)->by($request->ip()));
     }
 }
