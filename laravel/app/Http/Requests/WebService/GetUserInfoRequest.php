@@ -8,12 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 
-/**
- * Validates a getUserInfo call against the Interface Agreement.
- *
- * Every rule here mirrors one row of the IFA request table, so the contract and
- * the enforcement cannot drift apart.
- */
+
 class GetUserInfoRequest extends FormRequest
 {
     public function authorize(): bool
@@ -25,8 +20,7 @@ class GetUserInfoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // Format column: numeric only. Kept as a string in the contract so a
-            // consumer written in another language cannot lose precision on it.
+
             'userId' => ['required', 'string', 'regex:/^[0-9]+$/'],
 
             // 1: contact details, 2: role profile, 3: both.
@@ -35,7 +29,7 @@ class GetUserInfoRequest extends FormRequest
             // Mandatory tracking field required by the IFA.
             'timeStamp' => ['required', 'string', 'date_format:' . config('webservice.timestamp_format')],
 
-            // Optional correlation id; echoed back untouched when supplied.
+            // Optional correlation id
             'requestId' => ['nullable', 'string', 'max:64', 'regex:/^[A-Za-z0-9\-]+$/'],
         ];
     }
@@ -50,11 +44,7 @@ class GetUserInfoRequest extends FormRequest
         ];
     }
 
-    /**
-     * Laravel's default 422 body has no `status` field, which would break the
-     * contract on exactly the responses a consumer is most likely to mishandle.
-     * Rejections are re-wrapped in the standard envelope instead.
-     */
+
     protected function failedValidation(Validator $validator): void
     {
         throw new HttpResponseException(

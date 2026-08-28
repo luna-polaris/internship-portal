@@ -564,7 +564,7 @@
                     }
                 })
                 .catch(() => {
-                    // Token invalid/expired — drop it and leave the default Login/Register nav.
+                    // Token invalid/expired — drop it 
                     localStorage.removeItem('internhub_token');
                     localStorage.removeItem('internhub_role');
                 });

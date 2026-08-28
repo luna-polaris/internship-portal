@@ -8,15 +8,7 @@ use App\Models\User;
 use App\Support\WebService\ServiceResponse;
 use Illuminate\Http\JsonResponse;
 
-/**
- * getUserInfo — the web service User Management exposes to the rest of InternHub.
- *
- * Other modules hold a user id but not the user's details: the Interview module
- * needs a name for a notification, the Evaluation module needs a matric number on
- * a report, the Internship module needs an employer's company name on a posting.
- * Before this service each of them reached into App\Models\User directly, which
- * coupled them to this module's tables. They call this instead.
- */
+
 class UserInfoServiceController extends Controller
 {
     public function getUserInfo(GetUserInfoRequest $request): JsonResponse
@@ -47,8 +39,6 @@ class UserInfoServiceController extends Controller
             'userEmail' => $user->email,
             'userRole' => $user->role,
             'userStatus' => $user->status,
-            // Cast so an empty result still serialises as a JSON object, never as
-            // [], which would break a consumer that expects userDetails to be one.
             'userDetails' => (object) $details,
         ], $requestId);
     }
@@ -60,9 +50,7 @@ class UserInfoServiceController extends Controller
     }
 
     /**
-     * Role-specific fields. Nulls are stripped so a consumer can rely on a key
-     * being absent rather than testing for null on every field.
-     *
+     * Role-specific fields. Nulls are stripped so a consumer
      * @return array<string, string>
      */
     private function profileDetails(User $user): array

@@ -1,4 +1,3 @@
-{{-- Gated client-side by requireRole(['Admin']); the data is also protected server-side by the role:Admin middleware on /api/admin/*. --}}
 @extends('layouts.app')
 
 @section('title', 'Admin Dashboard — InternHub')

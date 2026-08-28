@@ -8,17 +8,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-/**
- * Consumes getInternshipStats, the web service exposed by the Internship module.
- *
- * The admin dashboard reports how many postings exist and how many vacancies they
- * carry. That is the Internship module's data, so User Management asks for it over
- * the Interface Agreement rather than querying App\Models\Internship itself.
- *
- * Every failure path returns null instead of throwing: the dashboard is a
- * read-only summary, and a teammate's service being down should degrade one panel,
- * not take the whole page with it. AdminController falls back when it gets null.
- */
+
 class InternshipStatsClient
 {
     /**
@@ -44,7 +34,6 @@ class InternshipStatsClient
                     'timeStamp' => ServiceResponse::now(),
                 ]);
         } catch (ConnectionException $e) {
-            // Unreachable host or timeout — expected while a teammate's module is offline.
             Log::warning('getInternshipStats unreachable', [
                 'requestId' => $requestId,
                 'endpoint' => $endpoint,
@@ -65,8 +54,6 @@ class InternshipStatsClient
             return null;
         }
 
-        // The contract says to trust `status`, not the HTTP code: a provider may
-        // answer 200 with status F, and that is still not usable data.
         if (($body['status'] ?? null) !== ServiceResponse::SUCCESS) {
             Log::warning('getInternshipStats did not succeed', [
                 'requestId' => $requestId,

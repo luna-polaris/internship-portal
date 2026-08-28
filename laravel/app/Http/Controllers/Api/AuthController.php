@@ -120,7 +120,7 @@ class AuthController extends Controller
         ]);
     }
 
-    // Deliberately separate from login(): username-based and Admin-only.
+    // separate from login(): username-based and Admin-only.
     public function adminLogin(AdminLoginRequest $request)
     {
         $username = trim($request->input('username'));
@@ -183,7 +183,6 @@ class AuthController extends Controller
             });
         }
 
-        // Same response either way, so this can't be used to discover which emails exist.
         return response()->json([
             'success' => true,
             'message' => 'If that email is registered, a reset link has been sent.',

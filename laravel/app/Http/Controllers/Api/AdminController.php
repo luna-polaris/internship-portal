@@ -13,9 +13,7 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    // Posting figures belong to the Internship module, so they are requested over the
-    // Interface Agreement rather than queried here. localInternshipStats() covers the
-    // window where that service is unavailable.
+
     public function dashboardStats(InternshipStatsClient $internshipStats)
     {
         $postings = $internshipStats->fetch() ?? $this->localInternshipStats();
@@ -37,14 +35,7 @@ class AdminController extends Controller
         ]);
     }
 
-    /**
-     * Fallback used only when getInternshipStats cannot be reached. It reproduces the
-     * same figures locally, which means it keeps the direct dependency on the
-     * Internship module's table that the web service exists to remove — so this
-     * method should go once that service is deployed for every developer.
-     *
-     * @return array{totalInternships:int, publishedInternships:int, draftInternships:int, closedInternships:int, totalVacancies:int}
-     */
+  
     private function localInternshipStats(): array
     {
         // Single grouped query instead of four separate COUNT(*) calls.
@@ -61,7 +52,7 @@ class AdminController extends Controller
         ];
     }
 
-    // Unlike the public /api/internships endpoint, this includes Draft and Closed postings.
+    // includes Draft and Closed postings.
     public function listInternships(Request $request)
     {
         $query = Internship::with('company:company_id,company_name')

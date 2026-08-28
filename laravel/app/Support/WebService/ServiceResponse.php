@@ -4,14 +4,7 @@ namespace App\Support\WebService;
 
 use Illuminate\Http\JsonResponse;
 
-/**
- * Builds every response this module's web services return.
- *
- * The Interface Agreement requires two fields on *every* response regardless of
- * outcome — `status` (S / F / E) and `timeStamp` — so they are added here rather
- * than repeated in each controller, which is what keeps the contract honest when
- * a new endpoint is added later.
- */
+
 class ServiceResponse
 {
     /** The request was understood and the data is in the payload. */
@@ -45,9 +38,7 @@ class ServiceResponse
 
     private static function envelope(string $status, array $payload, ?string $requestId, int $httpStatus): JsonResponse
     {
-        // status and timeStamp lead the payload so the contract's mandatory fields
-        // are the first thing a consumer reads; requestId is echoed back only when
-        // the caller supplied one, so it can correlate its own logs with ours.
+
         $body = ['status' => $status];
 
         if ($requestId !== null && $requestId !== '') {

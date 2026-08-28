@@ -8,7 +8,7 @@ use Illuminate\Validation\Rules\Password;
 
 class RegisterRequest extends FormRequest
 {
-    // Browser-side checks in register.blade.php are only for feedback; every rule here is enforced server-side too.
+    
     public function authorize(): bool
     {
         return true;
@@ -17,15 +17,11 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // Admin accounts are never self-registered — see database/seeders/AdminSeeder.php.
             'role' => ['required', Rule::in(['Student', 'Employer'])],
-
-            // Letters only; spaces are permitted so multi-word names still work.
             'full_name' => ['required', 'string', 'max:100', 'regex:/^[A-Za-z ]+$/'],
 
             'email' => ['required', 'email', 'max:100', 'unique:users,email'],
 
-            // `confirmed` pairs this with the password_confirmation field.
             'password' => [
                 'required',
                 'string',
@@ -33,7 +29,6 @@ class RegisterRequest extends FormRequest
                 Password::min(12)->mixedCase()->numbers()->symbols(),
             ],
 
-            // Malaysian mobile format: '01' followed by 8 or 9 digits (10-11 total).
             'phone' => ['nullable', 'string', 'regex:/^01[0-9]{8,9}$/'],
 
             'matric_no' => ['required_if:role,Student', 'string', 'max:20', 'unique:students,matric_no'],

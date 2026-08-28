@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
-// Generic "my account" controller that dispatches to the correct role-specific model; role-specific fields still live in StudentController/EmployerController/CompanyController.
+// Generic "my account" controller 
 class ProfileController extends Controller
 {
     public function show(Request $request)
@@ -77,15 +77,8 @@ class ProfileController extends Controller
             'profile_picture_url' => $user->fresh()->profile_picture_url,
         ]);
     }
-
-    /**
-     * Permanently delete the signed-in user's own account.
-     *
-     * The database cascades from `users`, so this also removes the student or
-     * employer row and everything hanging off it — for an employer that means
-     * their company, its internship postings, and every application made to
-     * them. The UI warns about that before calling this.
-     */
+    
+     //Permanently delete the signed-in user's own account.
     public function destroy(DeleteAccountRequest $request)
     {
         // Admins are blocked upstream by DeleteAccountRequest::authorize().
@@ -95,8 +88,6 @@ class ProfileController extends Controller
             return response()->json(['success' => false, 'message' => 'Password is incorrect.'], 422);
         }
 
-        // Uploaded files live on disk and aren't covered by the FK cascade, so
-        // collect their paths before the rows disappear.
         $user->loadMissing(['student', 'employer.company']);
         $files = array_filter([
             $user->profile_picture,

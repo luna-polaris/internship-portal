@@ -6,11 +6,6 @@ class EmailMasker
 {
     private const MASK_CHAR = '•';
 
-    /**
-     * Masks an email for display: jane.doe@example.com -> j••••••e@example.com.
-     * Keeps the local part's first/last chars so the owner still recognises it;
-     * local parts of 2 chars or fewer are masked entirely.
-     */
     public static function mask(?string $email): string
     {
         $email = trim((string) $email);

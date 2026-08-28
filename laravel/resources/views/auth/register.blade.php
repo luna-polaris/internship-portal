@@ -243,67 +243,6 @@
         });
         document.getElementById('matric_no').required = true;
 
-        (function () {
-            const addressInput = document.getElementById('address_search');
-            const suggestions = document.getElementById('address-suggestions');
-
-            // This block shares a <script> with the form validation, so a missing
-            // element must not throw — that would abort the rest of the file.
-            if (!addressInput || !suggestions) return;
-
-            function hideSuggestions() {
-                suggestions.hidden = true;
-                suggestions.innerHTML = '';
-            }
-
-            function choosePlace(place) {
-                const a = place.address || {};
-                addressInput.value = place.display_name;
-                document.getElementById('city').value = a.city || a.town || a.village || a.suburb || a.county || '';
-                document.getElementById('state').value = a.state || '';
-                document.getElementById('postcode').value = a.postcode || '';
-                hideSuggestions();
-            }
-
-            function renderSuggestions(places) {
-                suggestions.innerHTML = '';
-                if (!places.length) return hideSuggestions();
-
-                places.forEach((place) => {
-                    const li = document.createElement('li');
-                    li.textContent = place.display_name;
-                    // mousedown fires before the input's blur, which would otherwise close the list first.
-                    li.addEventListener('mousedown', (e) => {
-                        e.preventDefault();
-                        choosePlace(place);
-                    });
-                    suggestions.appendChild(li);
-                });
-                suggestions.hidden = false;
-            }
-
-            let timer, lastQuery = '';
-
-            addressInput.addEventListener('input', () => {
-                clearTimeout(timer);
-                const query = addressInput.value.trim();
-                if (query.length < 4) return hideSuggestions();
-
-                // Nominatim's usage policy forbids a request per keystroke, so only search after a pause.
-                timer = setTimeout(() => {
-                    if (query === lastQuery) return;
-                    lastQuery = query;
-
-                    fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=5&countrycodes=my&q='
-                        + encodeURIComponent(query), { headers: { 'Accept-Language': 'en' } })
-                        .then((res) => (res.ok ? res.json() : Promise.reject()))
-                        .then(renderSuggestions)
-                        .catch(hideSuggestions);
-                }, 700);
-            });
-
-            addressInput.addEventListener('blur', () => setTimeout(hideSuggestions, 150));
-        })();
 
         // Mirrors Laravel's Password rule (min 12, mixedCase, numbers, symbols) so the ticks never disagree with the server.
         const passwordRules = {

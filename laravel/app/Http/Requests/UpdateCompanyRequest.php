@@ -14,8 +14,7 @@ class UpdateCompanyRequest extends FormRequest
 
     public function rules(): array
     {
-        // Same constraints registration applies, so an employer can't edit their
-        // way to a company name or phone number the sign-up form would reject.
+
         return [
             'company_name' => [
                 'required',
