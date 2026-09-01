@@ -98,7 +98,11 @@ class AuthController extends Controller
         $email = strtolower(trim($request->input('email')));
         $user = User::where('email', $email)->where('role', '!=', 'Admin')->first();
 
-        if (! $user || ! Hash::check($request->input('password'), $user->password)) {
+        if (! $user) {
+            return response()->json(['success' => false, 'message' => 'Invalid email or password.'], 401);
+        }
+
+        if (! Hash::check($request->input('password'), $user->password)) {
             return response()->json(['success' => false, 'message' => 'Invalid email or password.'], 401);
         }
 

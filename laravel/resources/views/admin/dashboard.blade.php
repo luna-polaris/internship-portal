@@ -72,6 +72,29 @@
     </div>
   </div>
 
+  <div class="eval-card" style="margin-top:2rem;">
+    <h2>Account Management</h2>
+
+    <div class="eval-actions" style="margin-bottom:1rem;">
+      <select id="user-role-filter" style="max-width:180px;">
+        <option value="">All roles</option>
+        <option value="Student">Students</option>
+        <option value="Employer">Employers</option>
+        <option value="Admin">Admins</option>
+      </select>
+      <select id="user-status-filter" style="max-width:180px;">
+        <option value="">All statuses</option>
+        <option value="Active">Active</option>
+        <option value="Pending">Pending</option>
+        <option value="Inactive">Inactive</option>
+      </select>
+    </div>
+
+    <div id="users-wrap">
+      <p class="eval-empty">Loading accounts…</p>
+    </div>
+  </div>
+
 @endsection
 
 @push('scripts')
@@ -195,7 +218,87 @@
     searchTimer = setTimeout(() => { page = 1; loadJobs(); }, 300);
   });
 
+  const usersWrap = document.getElementById('users-wrap');
+
+  function loadUsers() {
+    const role = document.getElementById('user-role-filter').value;
+    const status = document.getElementById('user-status-filter').value;
+    const params = new URLSearchParams();
+    if (role) params.set('role', role);
+    if (status) params.set('status', status);
+
+    usersWrap.innerHTML = '<p class="eval-empty">Loading accounts…</p>';
+
+    fetch('{{ url('/api/admin/users') }}?' + params.toString(), { headers })
+      .then(r => r.ok ? r.json() : Promise.reject(r.status))
+      .then(({ data }) => renderUsers(data))
+      .catch(() => {
+        usersWrap.innerHTML = '<p class="eval-empty">Could not load accounts.</p>';
+      });
+  }
+
+  function renderUsers(users) {
+    if (!Array.isArray(users) || !users.length) {
+      usersWrap.innerHTML = '<p class="eval-empty">No accounts match this filter.</p>';
+      return;
+    }
+
+    usersWrap.innerHTML = `
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th><th>Username</th><th>Email</th><th>Role</th><th>Status</th><th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${users.map(user => {
+              const isActive = user.status === 'Active';
+              const actionLabel = isActive ? 'Deactivate' : 'Activate';
+              const actionPath = isActive ? 'deactivate' : 'activate';
+              return `
+                <tr>
+                  <td>${esc(user.full_name || '—')}</td>
+                  <td>${esc(user.username || '—')}</td>
+                  <td>${esc(user.email || '—')}</td>
+                  <td>${esc(user.role || '—')}</td>
+                  <td><span class="eval-pill eval-pill-${esc(user.status || 'Pending')}">${esc(user.status || 'Pending')}</span></td>
+                  <td>
+                    <button type="button" class="eval-btn eval-btn--ghost" data-user-id="${user.user_id}" data-user-action="${actionPath}">
+                      ${actionLabel}
+                    </button>
+                  </td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>`;
+
+    usersWrap.querySelectorAll('[data-user-action]').forEach(button => {
+      button.addEventListener('click', async () => {
+        const { userId, userAction } = button.dataset;
+        try {
+          const response = await fetch(`{{ url('/api/admin/users') }}/${userId}/${userAction}`, {
+            method: 'PATCH',
+            headers: { ...headers, 'Content-Type': 'application/json' }
+          });
+          const body = await response.json().catch(() => ({}));
+          if (!response.ok) throw new Error(body.message || 'Could not update account status.');
+          flash(body.message || 'Account updated.');
+          loadUsers();
+        } catch (error) {
+          flash(error.message || 'Could not update account status.', false);
+        }
+      });
+    });
+  }
+
+  document.getElementById('user-role-filter').addEventListener('change', loadUsers);
+  document.getElementById('user-status-filter').addEventListener('change', loadUsers);
+
   loadJobs();
+  loadUsers();
 })();
 </script>
 @endpush
