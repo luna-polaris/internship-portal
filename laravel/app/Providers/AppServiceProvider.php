@@ -25,11 +25,7 @@ class AppServiceProvider extends ServiceProvider
         $this->configureRateLimiting();
     }
 
-    /**
-     * Throttles for the credential-handling endpoints. Each limiter is keyed twice:
-     * once on the identity being attacked, so one account can't be ground down, and
-     * once on the source address, so a single client can't spray many accounts.
-     */
+
     private function configureRateLimiting(): void
     {
         RateLimiter::for('login', function (Request $request) {
@@ -41,7 +37,7 @@ class AppServiceProvider extends ServiceProvider
             ];
         });
 
-        // Deliberately tighter: this endpoint sends mail and is the usual probe for account enumeration.
+
         RateLimiter::for('password-forgot', function (Request $request) {
             return [
                 Limit::perMinute(3)->by('id:' . strtolower(trim((string) $request->input('email')))),
@@ -49,13 +45,10 @@ class AppServiceProvider extends ServiceProvider
             ];
         });
 
-        // Verification and reset links carry a token rather than an identity, so these can only be keyed on the caller.
         RateLimiter::for('token', fn (Request $request) => Limit::perMinute(10)->by($request->ip()));
 
         RateLimiter::for('register', fn (Request $request) => Limit::perMinute(5)->by($request->ip()));
 
-        // Module-to-module traffic: generous compared with the human-facing limits,
-        // but still bounded so one consumer in a retry loop cannot starve the rest.
         RateLimiter::for('webservice', fn (Request $request) => Limit::perMinute(120)->by($request->ip()));
     }
 }

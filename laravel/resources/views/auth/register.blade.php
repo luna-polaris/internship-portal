@@ -292,7 +292,6 @@
             });
         }
 
-        // errors: { field_name: ["message", ...], ... } — Laravel's 422 shape. Fields with no matching slot fall back to the top alert.
         function showFieldErrors(errors) {
             let firstInvalid = null;
             const orphaned = [];
@@ -307,7 +306,7 @@
                     return;
                 }
 
-                // A field can fail several rules at once, so show all of them rather than one error per attempt.
+                //show all errors
                 slot.textContent = '';
                 list.forEach((message, index) => {
                     if (index > 0) slot.appendChild(document.createElement('br'));

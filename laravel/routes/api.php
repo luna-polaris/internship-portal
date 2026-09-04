@@ -21,7 +21,6 @@ use App\Http\Controllers\Api\StudentApplicationController;
 use App\Http\Controllers\Api\StudentController;
 use Illuminate\Support\Facades\Route;
 
-// Credential-handling endpoints are throttled; see AppServiceProvider::configureRateLimiting().
 Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:register');
 Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:login');
 Route::post('/admin/login', [AuthController::class, 'adminLogin'])->middleware('throttle:login');
@@ -29,11 +28,7 @@ Route::get('/verify-email', [AuthController::class, 'verifyEmail'])->middleware(
 Route::post('/password/forgot', [AuthController::class, 'requestPasswordReset'])->middleware('throttle:password-forgot');
 Route::post('/password/reset', [AuthController::class, 'resetPassword'])->middleware('throttle:token');
 
-// ---------------------------------------------------------------------------
-// Web services exposed to other modules (Interface Agreement).
-// Authenticated by a shared service key, not by a user token; throttled so a
-// misbehaving consumer cannot exhaust this module.
-// ---------------------------------------------------------------------------
+
 Route::prefix('ws')->middleware(['service.key', 'throttle:webservice'])->group(function () {
     Route::post('/user-info', [UserInfoServiceController::class, 'getUserInfo'])->name('ws.user-info');
     Route::post('/internship-stats', [InternshipStatsServiceController::class, 'getInternshipStats'])->name('ws.internship-stats');

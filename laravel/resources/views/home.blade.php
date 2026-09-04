@@ -576,7 +576,6 @@
                         headers: { Accept: 'application/json', Authorization: 'Bearer ' + token },
                     });
                 } catch (err) {
-                    // Ignore — clear local state regardless of whether the request reached the server.
                 }
                 localStorage.removeItem('internhub_token');
                 localStorage.removeItem('internhub_role');
