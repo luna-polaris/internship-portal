@@ -23,7 +23,6 @@ class GetUserInfoRequest extends FormRequest
 
             'userId' => ['required', 'string', 'regex:/^[0-9]+$/'],
 
-            // 1: contact details, 2: role profile, 3: both.
             'queryFlag' => ['required', 'integer', Rule::in([1, 2, 3])],
 
             // Mandatory tracking field required by the IFA.
