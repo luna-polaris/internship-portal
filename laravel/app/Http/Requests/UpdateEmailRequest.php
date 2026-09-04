@@ -21,7 +21,7 @@ class UpdateEmailRequest extends FormRequest
                 'max:100',
                 Rule::unique('users', 'email')->ignore($this->user()->user_id, 'user_id'),
             ],
-            // Email doubles as the login identifier, so changing it requires re-proving the current password.
+            
             'current_password' => ['required', 'string'],
         ];
     }

@@ -17,7 +17,6 @@ class ChangePasswordRequest extends FormRequest
         return [
             'old_password' => ['required', 'string'],
 
-            // Same strength policy as registration, so this can't be used to downgrade to a weak password.
             'new_password' => [
                 'required',
                 'string',

@@ -7,18 +7,11 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-/**
- * Validates a getInternshipStats call against the Interface Agreement.
- *
- * Unlike getUserInfo, this contract makes requestId mandatory: the call carries no
- * business identifier at all, so the correlation id is the only handle either side
- * has on a particular exchange.
- */
+
 class GetInternshipStatsRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        // The caller is authenticated by VerifyServiceKey before this runs.
         return true;
     }
 
@@ -39,7 +32,6 @@ class GetInternshipStatsRequest extends FormRequest
         ];
     }
 
-    /** Rejections are re-wrapped so even a validation failure satisfies the contract. */
     protected function failedValidation(Validator $validator): void
     {
         throw new HttpResponseException(
