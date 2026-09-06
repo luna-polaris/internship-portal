@@ -15,6 +15,10 @@ Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
 
+Route::get('/password/reset', function () {
+    return view('auth.reset-password');
+});
+
 Route::get('/verify-email', [VerificationController::class, 'show'])->name('verify-email');
 
 Route::get('/profile', function () {

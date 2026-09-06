@@ -531,6 +531,30 @@ textarea.is-invalid {
     cursor: not-allowed;
 }
 
+.forgot-password-btn {
+    display: block;
+    margin: 0.85rem auto 0;
+    padding: 0.35rem 0.5rem;
+    border: none;
+    background: transparent;
+    color: #7ee787;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.forgot-password-btn:hover {
+    opacity: 0.75;
+}
+
+.forgot-password-btn:focus-visible {
+    outline: 2px solid var(--neon-chartreuse);
+    outline-offset: 3px;
+}
+
 .auth-footer-link {
     text-align: center;
     margin-top: 1.5rem;

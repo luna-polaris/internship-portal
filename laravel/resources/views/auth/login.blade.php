@@ -39,6 +39,7 @@
                     <input type="password" id="password" name="password" required>
                 </div>
                 <button type="submit" class="btn-submit">Log In</button>
+                <button type="button" id="forgot-password-btn" class="forgot-password-btn">Forgot your password?</button>
             </form>
 
             <!-- Kept as a separate form/endpoint on purpose — see AuthController::adminLogin. -->
@@ -118,6 +119,33 @@
                 email: document.getElementById('email').value,
                 password: document.getElementById('password').value,
             }, '{{ url('/') }}');
+        });
+
+        document.getElementById('forgot-password-btn').addEventListener('click', async () => {
+            const emailInput = document.getElementById('email');
+            const email = emailInput.value.trim();
+
+            if (!email) {
+                showAlert('Enter your email address first.', 'error');
+                emailInput.focus();
+                return;
+            }
+
+            try {
+                const response = await fetch('{{ url('/api/password/forgot') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({ email }),
+                });
+
+                const data = await response.json();
+                showAlert(data.message || 'If the email is registered, a reset link has been sent.', response.ok ? 'success' : 'error');
+            } catch (err) {
+                showAlert('Network error. Please try again.', 'error');
+            }
         });
 
         adminForm.addEventListener('submit', (event) => {

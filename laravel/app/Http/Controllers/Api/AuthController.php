@@ -181,7 +181,7 @@ class AuthController extends Controller
             $token = Str::random(64);
             $user->forceFill(['token' => $token, 'token_expires_at' => now()->addHour()])->save();
 
-            $resetLink = url("/api/reset-password?token={$token}");
+            $resetLink = url("/password/reset?token={$token}");
             Mail::raw("Reset your password: {$resetLink}", function ($message) use ($user) {
                 $message->to($user->email)->subject('Reset your InternHub password');
             });
