@@ -17,7 +17,14 @@ class StudentObserver
 
     public function updated(Student $student): void
     {
-        if ($student->wasChanged(['skills', 'interests', 'preferred_locations', 'cgpa'])) {
+        if ($student->wasChanged([
+            'programme',
+            'faculty',
+            'skills',
+            'interests',
+            'preferred_locations',
+            'cgpa',
+        ])) {
             $this->recommendations->refreshForStudent($student);
         }
     }
