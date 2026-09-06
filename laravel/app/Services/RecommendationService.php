@@ -20,6 +20,34 @@ class RecommendationService
     private const LOCATION_WEIGHT = 2;
     private const ELIGIBILITY_WEIGHT = 1;
 
+    /** Programme aliases and related internship terms used by the hard programme gate. */
+    private const PROGRAMME_KEYWORD_GROUPS = [
+        'it' => [
+            'programmes' => ['it', 'information technology', 'computer science', 'computing', 'software engineering', 'information systems', 'data science', 'cybersecurity'],
+            'jobs' => ['it', 'information technology', 'computer', 'computing', 'software', 'developer', 'programming', 'web', 'frontend', 'backend', 'full stack', 'data', 'analytics', 'database', 'sql', 'cloud', 'network', 'cybersecurity', 'security', 'devops', 'systems', 'digital'],
+        ],
+        'finance' => [
+            'programmes' => ['finance', 'accounting', 'economics', 'banking', 'investment', 'actuarial'],
+            'jobs' => ['finance', 'financial', 'accounting', 'accountant', 'audit', 'assurance', 'economics', 'banking', 'investment', 'valuation', 'wealth', 'risk', 'compliance', 'tax', 'actuarial'],
+        ],
+        'biotechnology' => [
+            'programmes' => ['biotechnology', 'biology', 'biochemistry', 'bioinformatics', 'life sciences', 'biomedical', 'chemistry', 'bioprocess'],
+            'jobs' => ['biotechnology', 'biology', 'biochemistry', 'bioinformatics', 'life sciences', 'biomedical', 'laboratory', 'lab', 'molecular', 'genomics', 'pcr', 'clinical trials', 'biomanufacturing', 'bioprocess', 'chemistry', 'research'],
+        ],
+        'engineering' => [
+            'programmes' => ['engineering', 'mechanical engineering', 'civil engineering', 'electrical engineering', 'electronic engineering', 'chemical engineering', 'structural engineering', 'construction management', 'quantity surveying'],
+            'jobs' => ['engineering', 'engineer', 'mechanical', 'civil', 'electrical', 'electronic', 'chemical', 'structural', 'construction', 'quantity surveying', 'design', 'cad', 'autocad', 'solidworks', 'infrastructure', 'site'],
+        ],
+        'healthcare' => [
+            'programmes' => ['healthcare', 'medicine', 'medical', 'nursing', 'pharmacy', 'public health', 'health sciences', 'health information'],
+            'jobs' => ['healthcare', 'health', 'medicine', 'medical', 'clinical', 'clinic', 'nursing', 'pharmacy', 'pharmacist', 'patient', 'hospital', 'medical records', 'public health'],
+        ],
+        'business' => [
+            'programmes' => ['business', 'business administration', 'management', 'marketing', 'human resource', 'human resources'],
+            'jobs' => ['business', 'administration', 'administrative', 'management', 'marketing', 'operations', 'project management', 'human resource', 'human resources', 'hr', 'customer', 'sales'],
+        ],
+    ];
+
     public function refreshForStudent(Student $student): Collection
     {
         $results = Internship::visible()->get()
@@ -74,7 +102,13 @@ class RecommendationService
             return [0.0, []];
         }
 
-        $haystack = mb_strtolower(implode(' ', array_filter([$internship->category, $internship->title, $internship->description])));
+        $haystack = mb_strtolower(implode(' ', array_filter([
+            $internship->category,
+            $internship->title,
+            $internship->description,
+            $internship->requirements,
+            ...($internship->skills_required ?? []),
+        ])));
 
         // Hard gate: unrelated to the student's programme/faculty is never recommended, regardless of other matches.
         if (! $this->matchesProgramme($student, $haystack)) {
@@ -115,13 +149,41 @@ class RecommendationService
 
     private function matchesProgramme(Student $student, string $haystack): bool
     {
+        $studentContext = mb_strtolower(trim(implode(' ', array_filter([
+            $student->programme,
+            $student->faculty,
+        ]))));
+
+        foreach (self::PROGRAMME_KEYWORD_GROUPS as $group) {
+            if ($this->containsAnyKeyword($studentContext, $group['programmes'])
+                && $this->containsAnyKeyword($haystack, $group['jobs'])) {
+                return true;
+            }
+        }
+
         $keywords = collect(preg_split('/[\s,\/&-]+/', (string) $student->programme, -1, PREG_SPLIT_NO_EMPTY))
             ->merge(preg_split('/[\s,\/&-]+/', (string) $student->faculty, -1, PREG_SPLIT_NO_EMPTY))
             ->map(fn ($word) => mb_strtolower($word))
             ->filter(fn ($word) => mb_strlen($word) >= 4)
             ->unique();
 
-        return $keywords->contains(fn ($word) => str_contains($haystack, $word));
+        return $keywords->contains(fn ($word) => $this->containsKeyword($haystack, $word));
+    }
+
+    private function containsAnyKeyword(string $text, array $keywords): bool
+    {
+        return collect($keywords)->contains(
+            fn ($keyword) => $this->containsKeyword($text, $keyword)
+        );
+    }
+
+    /** Complete word/phrase matching prevents short aliases such as IT matching digital. */
+    private function containsKeyword(string $text, string $keyword): bool
+    {
+        return preg_match(
+            '/(?<![\p{L}\p{N}])'.preg_quote(mb_strtolower($keyword), '/').'(?![\p{L}\p{N}])/u',
+            mb_strtolower($text)
+        ) === 1;
     }
 
     private function normalized(?array $values): Collection
